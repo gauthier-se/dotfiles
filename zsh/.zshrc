@@ -1,28 +1,42 @@
-# ── oh-my-zsh ────────────────────────────────────────────────────────────────
+# --- Oh My Zsh Configuration --------------------------------------------------
 export ZSH="$HOME/.oh-my-zsh"
+
+# Leave empty as the theme is managed by Pure prompt below.
 ZSH_THEME=""
 
-plugins=(git nvm)
+# Plugins configuration.
+# Note: zsh-syntax-highlighting must always be the last plugin in the array.
+plugins=(
+  git
+  nvm
+  you-should-use
+  zsh-autosuggestions
+  zsh-bat
+  zsh-syntax-highlighting
+)
 
 source $ZSH/oh-my-zsh.sh
 
-# ── Pure prompt ───────────────────────────────────────────────────────────────
+# --- Prompt Configuration (Pure) ----------------------------------------------
 fpath+=("$(brew --prefix)/share/zsh/site-functions")
 autoload -U promptinit; promptinit
 prompt pure
 
-# ── Aliases ───────────────────────────────────────────────────────────────────
+# --- Syntax Highlighting Theme (Catppuccin Mocha) -----------------------------
+source ~/.zsh/catppuccin_mocha-zsh-syntax-highlighting.zsh
+
+# --- Aliases ------------------------------------------------------------------
 alias ll="ls -lshA"
 alias la="ls -A"
 alias ..="cd .."
 alias ...="cd ../.."
 alias c="clear"
 
-# ── fzf ───────────────────────────────────────────────────────────────────────
+# --- Fuzzy Finder (fzf) -------------------------------------------------------
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# ── zoxide ────────────────────────────────────────────────────────────────────
+# --- Zoxide (Smarter cd) ------------------------------------------------------
 eval "$(zoxide init zsh)"
 
-# ── OrbStack ──────────────────────────────────────────────────────────────────
+# --- OrbStack Integration -----------------------------------------------------
 source ~/.orbstack/shell/init.zsh 2>/dev/null || :
