@@ -28,7 +28,7 @@ My personal dotfiles for macOS, managed with [GNU Stow](https://www.gnu.org/soft
 ## Installation
 
 ```bash
-git clone https://github.com/gauthierseyzeriat/dotfiles.git ~/dotfiles
+git clone https://github.com/gauthier-se/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 chmod +x install.sh
 ./install.sh
