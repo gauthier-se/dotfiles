@@ -1,0 +1,23 @@
+[user]
+name = gauthierseyzeriat
+email = gseyzeriat1@gmail.com
+
+[core]
+editor = nvim
+autocrlf = input
+excludesfile = ~/.gitignore_global
+
+[init]
+defaultBranch = main
+
+[pull]
+rebase = false
+
+[push]
+autoSetupRemote = true
+
+[color]
+ui = auto
+
+[diff]
+colorMoved = zebra
