@@ -1,0 +1,25 @@
+# ~/.config/tmuxinator/checkpoint.yml
+
+name: checkpoint
+root: ~/Repos/Java/Checkpoint
+
+windows:
+  - opencode:
+      panes:
+        - opencode .
+
+  - nvim:
+      panes:
+        - nvim .
+
+  - infrastructure:
+      panes:
+        - cd api && docker compose up
+
+  - backend:
+      panes:
+        - cd api && doppler run -- ./mvnw spring-boot:run
+
+  - frontend:
+      panes:
+        - cd web && pnpm dev
