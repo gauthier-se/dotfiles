@@ -23,3 +23,11 @@ windows:
   - frontend:
       panes:
         - cd web && pnpm dev
+
+  - lazygit:
+      panes:
+        - lazygit
+
+  - zsh:
+      panes:
+      - fastfetch

@@ -1032,37 +1032,10 @@ require('lazy').setup({
   require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
-  -- 🐹 go.nvim: Ultimate Go language support for Neovim
-  {
-    'ray-x/go.nvim',
-    dependencies = {
-      'ray-x/guihua.lua',
-      'neovim/nvim-lspconfig',
-      'nvim-treesitter/nvim-treesitter',
-    },
-    config = function()
-      require('go').setup()
 
-      -- Run gofmt + goimports on save
-      local format_sync_grp = vim.api.nvim_create_augroup('goimports', {})
-      vim.api.nvim_create_autocmd('BufWritePre', {
-        pattern = '*.go',
-        callback = function()
-          require('go.format').goimports()
-        end,
-        group = format_sync_grp,
-      })
-    end,
-    event = { 'CmdlineEnter' },
-    ft = { 'go', 'gomod' },
-    build = ':lua require("go.install").update_all_sync()', -- installs all needed Go tools
-  },
-
-  -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
+  -- NOTE: The import below automatically adds your own plugins from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
-  --
-  --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
