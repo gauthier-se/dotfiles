@@ -1,0 +1,21 @@
+# ~/.config/tmuxinator/greenskills.yml
+
+name: greenskills
+root: ~/Repos/Csharp/GreenSkills
+
+windows:
+  - claude:
+      panes:
+        - claude 
+
+  - nvim:
+      panes:
+        - nvim .
+
+  - lazygit:
+      panes:
+        - lazygit
+
+  - zsh:
+      panes:
+      - fastfetch

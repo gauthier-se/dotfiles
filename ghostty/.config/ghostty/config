@@ -1,0 +1,24 @@
+theme = "Catppuccin Mocha"
+background = #1b1f2e
+background-opacity = 0.85
+background-blur-radius = 20
+
+font-family = "JetBrainsMono Nerd Font Mono"
+font-size = 13
+cursor-style = bar
+cursor-style-blink = true
+
+maximize = true
+window-decoration = none
+window-padding-x = 5
+window-padding-y = 5
+
+copy-on-select = true
+mouse-hide-while-typing = true
+confirm-close-surface = false
+
+keybind = clear
+keybind = cmd+c=copy_to_clipboard
+keybind = cmd+v=paste_from_clipboard
+keybind = cmd+shift+,=reload_config
+keybind = cmd+q=quit

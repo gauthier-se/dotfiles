@@ -17,7 +17,7 @@ if ! command -v stow &>/dev/null; then
 fi
 
 # Stow each package
-packages=(git nvim tmux vim zsh)
+packages=(ghostty git nvim tmux vim zsh)
 
 for pkg in "${packages[@]}"; do
     echo -e "  Stowing ${GREEN}$pkg${NC}..."
