@@ -6,31 +6,38 @@ root: ~/Repos/Java/Checkpoint
 windows:
   - claude:
       panes:
-        - claude
+        - |
+          claude
 
   - nvim:
       panes:
-        - nvim .
+        - |
+          nvim .
 
   - infrastructure:
       panes:
-        - cd api 
-        - docker compose up
+        - |
+          cd api
+          docker compose up
 
   - backend:
       panes:
-        - cd api
-        - doppler run -- ./mvnw spring-boot:run
+        - |
+          cd api
+          doppler run -- ./mvnw spring-boot:run
 
   - frontend:
       panes:
-        - cd web 
-        - pnpm dev
+        - |
+          cd web
+          pnpm dev
 
   - lazygit:
       panes:
-        - lazygit
+        - |
+          lazygit
 
   - zsh:
       panes:
-      - fastfetch
+        - |
+          fastfetch

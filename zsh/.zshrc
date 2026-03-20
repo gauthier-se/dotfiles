@@ -31,10 +31,13 @@ alias ll="ls -lshA"
 alias la="ls -A"
 alias ..="cd .."
 alias ...="cd ../.."
+alias ....="cd ../../.."
 alias c="clear"
-alias update="brew update && brew upgrade && brew cleanup"
 alias vi="nvim"
 alias mux="tmuxinator"
+alias openzs="vi ~/dotfiles/zsh/.zshrc"
+alias sourcezs="source ~/.zshrc"
+alias update="brew update && brew upgrade && brew cleanup"
 
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -61,3 +64,15 @@ export SDKMAN_DIR="$HOME/.sdkman"
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+export EDITOR=nvim
+
+# Yazi
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}

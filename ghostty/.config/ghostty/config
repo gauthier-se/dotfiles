@@ -21,4 +21,10 @@ keybind = clear
 keybind = cmd+c=copy_to_clipboard
 keybind = cmd+v=paste_from_clipboard
 keybind = cmd+shift+,=reload_config
+keybind = cmd+,=open_config
 keybind = cmd+q=quit
+
+macos-icon = custom-style
+macos-icon-ghost-color = #ffffff
+macos-icon-screen-color = #1b1f2e
+macos-icon-frame = aluminum
