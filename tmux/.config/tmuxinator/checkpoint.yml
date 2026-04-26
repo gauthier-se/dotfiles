@@ -17,8 +17,10 @@ windows:
   - infrastructure:
       panes:
         - |
+          orb
           cd api
-          docker compose up
+          docker compose up -d
+          lazydocker
 
   - backend:
       panes:
