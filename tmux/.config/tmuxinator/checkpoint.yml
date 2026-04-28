@@ -17,7 +17,7 @@ windows:
   - infrastructure:
       panes:
         - |
-          orb
+          startdocker 
           cd api
           docker compose up -d
           lazydocker

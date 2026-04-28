@@ -42,8 +42,10 @@ alias openzs="vi ~/dotfiles/zsh/.zshrc"
 alias sourcezs="source ~/.zshrc"
 if $IS_MACOS; then
   alias update="brew update && brew upgrade && brew cleanup"
+  alias startdocker="orb"
 else
   alias update="yay -Syu"
+  alias startdocker="sudo systemctl start docker"
 fi
 
 # fzf
