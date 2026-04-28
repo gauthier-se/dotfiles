@@ -5,3 +5,6 @@
 .netrwhist
 .luarc.json
 tags
+
+# Tmux plugins (managed by TPM)
+tmux/.config/tmux/plugins/

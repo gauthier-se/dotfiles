@@ -1,12 +1,11 @@
+# Detect OS
+[[ "$OSTYPE" == "darwin"* ]] && IS_MACOS=true || IS_MACOS=false
+
 # Oh My Zsh Configuration
 export ZSH="$HOME/.oh-my-zsh"
 DISABLE_AUTO_TITLE="true"
-
-# Leave empty as the theme is managed by Pure prompt below.
 ZSH_THEME=""
 
-# Plugins configuration.
-# Note: zsh-syntax-highlighting must always be the last plugin in the array.
 plugins=(
   git
   nvm
@@ -18,12 +17,16 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
-# Prompt Configuration (Pure)
-fpath+=("$(brew --prefix)/share/zsh/site-functions")
+# Pure prompt
+if $IS_MACOS; then
+  fpath+=("$(brew --prefix)/share/zsh/site-functions")
+else
+  fpath+=("$HOME/.zsh/pure")
+fi
 autoload -U promptinit; promptinit
 prompt pure
 
-# Syntax Highlighting Theme (Catppuccin Mocha)
+# Catppuccin Mocha syntax highlighting
 source ~/.zsh/catppuccin_mocha-zsh-syntax-highlighting.zsh
 
 # Aliases
@@ -37,7 +40,11 @@ alias vi="nvim"
 alias mux="tmuxinator"
 alias openzs="vi ~/dotfiles/zsh/.zshrc"
 alias sourcezs="source ~/.zshrc"
-alias update="brew update && brew upgrade && brew cleanup"
+if $IS_MACOS; then
+  alias update="brew update && brew upgrade && brew cleanup"
+else
+  alias update="yay -Syu"
+fi
 
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -45,50 +52,48 @@ alias update="brew update && brew upgrade && brew cleanup"
 # Zoxide
 eval "$(zoxide init zsh)"
 
-# OrbStack
-source ~/.orbstack/shell/init.zsh 2>/dev/null || :
-
-# opencode
-export PATH=/Users/gauthierseyzeriat/.opencode/bin:$PATH
-
-# Local bin
-export PATH="$HOME/.local/bin:$PATH"
-
-# SDKMAN
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-
-# bun completions
-[ -s "/Users/gauthierseyzeriat/.bun/_bun" ] && source "/Users/gauthierseyzeriat/.bun/_bun"
-
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
-export EDITOR=nvim
-
 # Yazi
 function y() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	yazi "$@" --cwd-file="$tmp"
-	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-		builtin cd -- "$cwd"
-	fi
-	rm -f -- "$tmp"
+  local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+  yazi "$@" --cwd-file="$tmp"
+  if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+    builtin cd -- "$cwd"
+  fi
+  rm -f -- "$tmp"
 }
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/opt/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/opt/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/opt/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/opt/anaconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
+export PATH="$HOME/.opencode/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+export EDITOR=nvim
 
+# macOS only
+if $IS_MACOS; then
+  # OrbStack
+  source ~/.orbstack/shell/init.zsh 2>/dev/null || :
+
+  # SDKMAN
+  export SDKMAN_DIR="$HOME/.sdkman"
+  [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+  # bun
+  [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+  export BUN_INSTALL="$HOME/.bun"
+  export PATH="$BUN_INSTALL/bin:$PATH"
+
+  # conda
+  __conda_setup="$('/opt/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+  if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+  else
+    if [ -f "/opt/anaconda3/etc/profile.d/conda.sh" ]; then
+      . "/opt/anaconda3/etc/profile.d/conda.sh"
+    else
+      export PATH="/opt/anaconda3/bin:$PATH"
+    fi
+  fi
+  unset __conda_setup
+fi
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

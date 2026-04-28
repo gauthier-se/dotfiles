@@ -1,0 +1,111 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 36,
+    "margin-top": 8,
+    "margin-left": 8,
+    "margin-right": 8,
+    "spacing": 4,
+    "exclusive": true,
+
+    "modules-left":   ["hyprland/workspaces", "hyprland/window"],
+    "modules-center": ["clock"],
+    "modules-right":  ["group/stats", "tray"],
+
+    "group/stats": {
+        "orientation": "horizontal",
+        "modules": ["cpu", "memory", "backlight", "wireplumber", "network", "battery"]
+    },
+
+    "hyprland/workspaces": {
+        "format": "{icon}",
+        "on-click": "activate",
+        "sort-by-number": true,
+        "persistent-workspaces": {
+            "*": 10
+        },
+        "format-icons": {
+            "active":  "●",
+            "default": "●",
+            "empty":   "○",
+            "urgent":  "●"
+        }
+    },
+
+    "hyprland/window": {
+        "format": "{}",
+        "max-length": 60,
+        "separate-outputs": true
+    },
+
+    "clock": {
+        "format": " {:%H:%M}",
+        "format-alt": " {:%A %d %B %Y}",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode": "year",
+            "mode-mon-col": 3,
+            "on-scroll": 1,
+            "format": {
+                "today": "<span color='#89b4fa'><b>{}</b></span>"
+            }
+        }
+    },
+
+    "cpu": {
+        "interval": 5,
+        "format": " {usage}%",
+        "tooltip": false
+    },
+
+    "memory": {
+        "interval": 5,
+        "format": "󰍛 {percentage}%",
+        "tooltip-format": "{used:0.1f}G / {total:0.1f}G"
+    },
+
+    "backlight": {
+        "format": "{icon} {percent}%",
+        "format-icons": ["󰃞", "󰃟", "󰃠"],
+        "on-scroll-up":   "brightnessctl -e4 -n2 set 5%+",
+        "on-scroll-down": "brightnessctl -e4 -n2 set 5%-",
+        "smooth-scrolling-threshold": 1
+    },
+
+    "wireplumber": {
+        "format": "{icon} {volume}%",
+        "format-muted": "󰝟 muet",
+        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "on-scroll-up":   "wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+",
+        "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-",
+        "format-icons": ["󰕿", "󰖀", "󰕾"]
+    },
+
+    "network": {
+        "interface": "wlp1s0",
+        "format-wifi":       "󰤨 {signalStrength}%",
+        "format-ethernet":   "󰈀 {ipaddr}",
+        "format-disconnected": "󰤭 déconnecté",
+        "tooltip-format-wifi": "{essid}\n{ipaddr}/{cidr}\n{frequency} GHz",
+        "max-length": 30
+    },
+
+    "battery": {
+        "bat": "BAT0",
+        "states": {
+            "good":     95,
+            "warning":  30,
+            "critical": 15
+        },
+        "format":          "{icon} {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "format-plugged":  "󰚦 {capacity}%",
+        "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+        "tooltip-format": "{timeTo}"
+    },
+
+    "tray": {
+        "spacing": 8,
+        "icon-size": 16
+    }
+}
