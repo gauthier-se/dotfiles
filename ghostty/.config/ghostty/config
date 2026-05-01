@@ -9,7 +9,8 @@ cursor-style = bar
 cursor-style-blink = true
 
 maximize = true
-window-decoration = none
+window-decoration = true
+macos-titlebar-style = "hidden"
 window-padding-x = 5
 window-padding-y = 5
 

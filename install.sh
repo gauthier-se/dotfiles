@@ -131,7 +131,7 @@ common_packages=(git nvim tmux vim zsh yazi)
 
 # Platform-specific
 if $IS_MACOS; then
-  platform_packages=(ghostty)
+  platform_packages=(ghostty aerospace)
 else
   platform_packages=(alacritty hypr waybar wofi dunst gtk brave qt)
 fi
