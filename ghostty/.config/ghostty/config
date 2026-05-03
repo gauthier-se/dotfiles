@@ -24,6 +24,7 @@ keybind = cmd+v=paste_from_clipboard
 keybind = cmd+shift+,=reload_config
 keybind = cmd+,=open_config
 keybind = cmd+q=quit
+keybind = cmd+w=close_surface
 
 macos-icon = custom-style
 macos-icon-ghost-color = #ffffff
