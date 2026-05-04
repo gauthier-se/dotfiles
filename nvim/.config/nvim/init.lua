@@ -995,6 +995,7 @@ require('lazy').setup({
     -- Highlighting is native in neovim 0.11+; parsers from Arch packages are used automatically.
     -- To install extra parsers: :TSInstall <lang>  (requires tree-sitter CLI)
     'nvim-treesitter/nvim-treesitter',
+    branch = 'main',
     build = ':TSUpdate',
   },
 

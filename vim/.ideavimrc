@@ -1,0 +1,107 @@
+""" IdeaVim configuration
+""" Aligned with my Neovim setup (~/.config/nvim/init.lua) so muscle memory
+""" carries over between Neovim and JetBrains IDEs.
+
+""" --- BASE OPTIONS ---
+set scrolloff=10          " Keep 10 lines of context above/below the cursor (matches nvim)
+set incsearch             " Show matches incrementally as you type
+set hlsearch              " Highlight all search matches
+set ignorecase            " Case-insensitive search...
+set smartcase             " ...unless the pattern contains an uppercase letter
+set number                " Show absolute line number on the cursor line
+set relativenumber        " Relative numbers on other lines for easier jumps
+set noshowmode            " Don't show mode in the command line (IDE status bar already does)
+set cursorline            " Highlight the current line
+set history=500           " Big command history
+set clipboard+=unnamedplus " Share the system clipboard (matches nvim)
+set timeoutlen=300        " Faster mapped-sequence wait time
+set updatetime=250        " Faster CursorHold / swap write
+set splitright            " Vertical splits open on the right
+set splitbelow            " Horizontal splits open below
+set mouse=a               " Enable mouse in all modes
+
+""" --- LEADER KEY ---
+" Space is the leader, like in nvim
+let mapleader=" "
+
+""" --- IDEAVIM PLUGIN EMULATIONS ---
+" Built-in IdeaVim plugins that mirror common nvim plugins
+set surround              " mini.surround equivalent: cs"' to change " into '
+set multiple-cursors      " Multi-cursor support
+set commentary            " Comment with gcc / gc{motion}
+set highlightedyank       " Brief flash on yank (matches vim.hl.on_yank)
+set NERDTree              " Allows :NERDTree-style commands; tool window kept via leader+p
+
+""" --- ESC clears search highlight (matches nvim) ---
+nnoremap <Esc> :nohlsearch<CR>
+
+""" --- WINDOW NAVIGATION (matches nvim) ---
+" Move focus between splits with Ctrl + h/j/k/l
+nmap <C-h> <C-w>h
+nmap <C-j> <C-w>j
+nmap <C-k> <C-w>k
+nmap <C-l> <C-w>l
+
+""" --- SPLITS / TABS ---
+nmap <leader>vs <Action>(SplitVertically)
+nmap <leader>hs <Action>(SplitHorizontally)
+nmap <leader>w  <Action>(CloseContent)
+
+""" --- FILE / TEXT SEARCH (Telescope-style aliases from nvim) ---
+" <leader>sf [S]earch [F]iles
+nmap <leader>sf <Action>(GotoFile)
+" <leader>sg [S]earch by [G]rep (find in path)
+nmap <leader>sg <Action>(FindInPath)
+" <leader>sw [S]earch current [W]ord
+nmap <leader>sw <Action>(FindWordAtCaret)
+" <leader>sd [S]earch [D]iagnostics (problems view)
+nmap <leader>sd <Action>(ActivateProblemsViewToolWindow)
+" <leader>sr [S]earch [R]esume (last find usage)
+nmap <leader>sr <Action>(ShowRecentFindUsagesGroup)
+" <leader>s. [S]earch recent files
+nmap <leader>s. <Action>(RecentFiles)
+" <leader><leader> Find existing buffers
+nmap <leader><leader> <Action>(Switcher)
+" <leader>/ Fuzzy search inside current buffer
+nmap <leader>/ <Action>(Find)
+
+""" --- CODE NAVIGATION (LSP-style, matches nvim's gr* mappings) ---
+" grn [R]e[N]ame symbol
+nmap grn <Action>(RenameElement)
+" gra [G]oto code [A]ction (intentions / quick fixes)
+nmap gra <Action>(ShowIntentionActions)
+vmap gra <Action>(ShowIntentionActions)
+" grr [G]oto [R]eferences
+nmap grr <Action>(FindUsages)
+" gri [G]oto [I]mplementation
+nmap gri <Action>(GotoImplementation)
+" grd [G]oto [D]efinition
+nmap grd <Action>(GotoDeclaration)
+" grD [G]oto [D]eclaration (type)
+nmap grD <Action>(GotoTypeDeclaration)
+" grt [G]oto [T]ype Definition
+nmap grt <Action>(GotoTypeDeclaration)
+" gO Document symbols (file structure popup)
+nmap gO <Action>(FileStructurePopup)
+" gW Workspace symbols
+nmap gW <Action>(GotoSymbol)
+" Hover documentation
+nmap K  <Action>(QuickJavaDoc)
+
+""" --- FORMAT / IMPORTS ---
+nmap <leader>f <Action>(ReformatCode)
+nmap <leader>i <Action>(OptimizeImports)
+
+""" --- DIAGNOSTICS (matches nvim's <leader>q) ---
+nmap <leader>q <Action>(ActivateProblemsViewToolWindow)
+
+""" --- DEBUG ---
+" <leader>bb toggle line breakpoint
+nmap <leader>bb <Action>(ToggleLineBreakpoint)
+" <leader>dd start debug
+nmap <leader>dd <Action>(Debug)
+
+""" --- VISUAL MODE QOL ---
+" Keep selection after indenting
+vmap < <gv
+vmap > >gv
