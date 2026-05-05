@@ -43,6 +43,7 @@ alias vi="nvim"
 alias mux="tmuxinator"
 alias openzs="vi ~/dotfiles/zsh/.zshrc"
 alias sourcezs="source ~/.zshrc"
+alias cat="bat -p"
 if $IS_MACOS; then
   alias update="brew update && brew upgrade && brew cleanup"
   alias startdocker="orb"

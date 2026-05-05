@@ -8,16 +8,17 @@ Targets **macOS** (Homebrew) and **Arch Linux + Hyprland** (Wayland) from a sing
 
 ### Common (both platforms)
 
-| Package | Description                              |
-| ------- | ---------------------------------------- |
-| `git`   | Git configuration                        |
-| `nvim`  | Neovim config (based on kickstart)       |
-| `tmux`  | Tmux + Catppuccin theme                  |
-| `vim`   | Minimal Vim fallback                     |
-| `zsh`   | Zsh + Oh My Zsh + Pure prompt            |
-| `yazi`  | Terminal file manager                    |
+| Package     | Description                              |
+| ----------- | ---------------------------------------- |
+| `git`       | Git configuration                        |
+| `nvim`      | Neovim config (based on kickstart)       |
+| `tmux`      | Tmux + Catppuccin theme                  |
+| `vim`       | Minimal Vim fallback                     |
+| `zsh`       | Zsh + Oh My Zsh + Pure prompt            |
+| `yazi`      | Terminal file manager                    |
 | `lazygit`   | Git TUI (delta integration + Catppuccin) |
 | `lazydocker`| Docker TUI (Catppuccin theme)            |
+| `bat`       | Cat clone with syntax highlighting       |
 
 ### macOS only
 
