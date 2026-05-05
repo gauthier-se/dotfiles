@@ -29,14 +29,15 @@ if $IS_MACOS; then
     echo "Homebrew is required on macOS. Install it from https://brew.sh"
     exit 1
   fi
-  brew install stow tmux neovim fzf zoxide bat yazi
+  brew install stow tmux neovim fzf zoxide bat yazi git-delta lazygit lazydocker
   brew install pure
+  brew install --cask nikitabobko/tap/aerospace
 else
   if ! command -v pacman &>/dev/null; then
     echo "pacman not found — is this really Arch Linux?"
     exit 1
   fi
-  sudo pacman -S --needed --noconfirm stow tmux neovim fzf zoxide bat grim slurp ttf-jetbrains-mono-nerd brightnessctl awww jq wl-clipboard libnotify imv kvantum qt5ct qt6ct noto-fonts noto-fonts-emoji noto-fonts-cjk
+  sudo pacman -S --needed --noconfirm stow tmux neovim fzf zoxide bat git-delta lazygit lazydocker grim slurp ttf-jetbrains-mono-nerd brightnessctl awww jq wl-clipboard libnotify imv kvantum qt5ct qt6ct noto-fonts noto-fonts-emoji noto-fonts-cjk
 
   if ! command -v yay &>/dev/null; then
     echo "yay (AUR helper) is required. Install it first: https://github.com/Jguer/yay"
@@ -127,7 +128,7 @@ if ! command -v stow &>/dev/null; then
 fi
 
 # Packages common to both platforms
-common_packages=(git nvim tmux vim zsh yazi)
+common_packages=(git nvim tmux vim zsh yazi lazygit lazydocker)
 
 # Platform-specific
 if $IS_MACOS; then

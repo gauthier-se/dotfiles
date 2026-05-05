@@ -6,6 +6,7 @@ email = gseyzeriat1@gmail.com
 editor = nvim
 autocrlf = input
 excludesfile = ~/.gitignore_global
+pager = delta
 
 [init]
 defaultBranch = main
@@ -19,8 +20,23 @@ autoSetupRemote = true
 [color]
 ui = auto
 
+[interactive]
+diffFilter = delta --color-only
+
+[delta]
+features = catppuccin-mocha
+navigate = true
+line-numbers = true
+side-by-side = false
+
+[merge]
+conflictstyle = zdiff3
+
 [diff]
 colorMoved = zebra
+
+[include]
+path = ~/dotfiles/git/catppuccin.gitconfig
 [credential "https://github.com"]
 	helper = 
 	helper = !/opt/homebrew/bin/gh auth git-credential

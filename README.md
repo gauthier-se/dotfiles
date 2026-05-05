@@ -16,12 +16,15 @@ Targets **macOS** (Homebrew) and **Arch Linux + Hyprland** (Wayland) from a sing
 | `vim`   | Minimal Vim fallback                     |
 | `zsh`   | Zsh + Oh My Zsh + Pure prompt            |
 | `yazi`  | Terminal file manager                    |
+| `lazygit`   | Git TUI (delta integration + Catppuccin) |
+| `lazydocker`| Docker TUI (Catppuccin theme)            |
 
 ### macOS only
 
-| Package    | Description       |
-| ---------- | ----------------- |
-| `ghostty`  | Terminal emulator |
+| Package     | Description                          |
+| ----------- | ------------------------------------ |
+| `ghostty`   | Terminal emulator                    |
+| `aerospace` | Tiling window manager (i3-inspired)  |
 
 ### Arch Linux only
 

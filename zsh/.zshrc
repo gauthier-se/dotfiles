@@ -1,6 +1,9 @@
 # Detect OS
 [[ "$OSTYPE" == "darwin"* ]] && IS_MACOS=true || IS_MACOS=false
 
+# XDG base dirs (so macOS tools like lazygit/lazydocker use ~/.config/)
+export XDG_CONFIG_HOME="$HOME/.config"
+
 # Oh My Zsh Configuration
 export ZSH="$HOME/.oh-my-zsh"
 DISABLE_AUTO_TITLE="true"
@@ -67,6 +70,7 @@ function y() {
 export PATH="$HOME/.opencode/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export EDITOR=nvim
+export BAT_THEME="base16"
 
 # macOS only
 if $IS_MACOS; then
