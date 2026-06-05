@@ -211,6 +211,19 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 
+-- AZERTY macOS numbers map
+local azerty_opts = { noremap = true, silent = true }
+vim.keymap.set({ 'n', 'v', 'o' }, '&', '1', azerty_opts)
+vim.keymap.set({ 'n', 'v', 'o' }, 'é', '2', azerty_opts)
+vim.keymap.set({ 'n', 'v', 'o' }, '"', '3', azerty_opts)
+vim.keymap.set({ 'n', 'v', 'o' }, "'", '4', azerty_opts)
+vim.keymap.set({ 'n', 'v', 'o' }, '(', '5', azerty_opts)
+vim.keymap.set({ 'n', 'v', 'o' }, '§', '6', azerty_opts)
+vim.keymap.set({ 'n', 'v', 'o' }, 'è', '7', azerty_opts)
+vim.keymap.set({ 'n', 'v', 'o' }, '!', '8', azerty_opts)
+vim.keymap.set({ 'n', 'v', 'o' }, 'ç', '9', azerty_opts)
+vim.keymap.set({ 'n', 'v', 'o' }, 'à', '0', azerty_opts)
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -864,7 +877,7 @@ require('lazy').setup({
         -- <c-k>: Toggle signature help
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
-        preset = 'default',
+        preset = 'enter',
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps

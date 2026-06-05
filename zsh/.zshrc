@@ -39,7 +39,6 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 alias c="clear"
-alias plz="sudo !!"
 alias vi="nvim"
 alias mux="tmuxinator"
 alias openzs="vi ~/dotfiles/zsh/.zshrc"
@@ -107,3 +106,11 @@ fi
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+if $IS_MACOS; then
+  # Added by Antigravity IDE
+  export PATH="/Users/gauthierseyzeriat/.antigravity-ide/antigravity-ide/bin:$PATH"
+
+  # Added by Antigravity CLI installer
+  export PATH="/Users/gauthierseyzeriat/.local/bin:$PATH"
+fi

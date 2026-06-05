@@ -5,7 +5,7 @@ sort_dir_first = true
 sort_reverse   = false
 sort_sensitive = false
 linemode       = "size"
-show_hidden    = false
+show_hidden    = true
 show_symlink   = true
 scrolloff      = 5
 
@@ -29,15 +29,15 @@ reveal = [
 
 [open]
 rules = [
-    { name = "*.toml", use = "edit" },
-    { name = "*.yaml", use = "edit" },
-    { name = "*.yml", use = "edit" },
-    { name = "*.json", use = "edit" },
+    { url = "*.toml", use = "edit" },
+    { url = "*.yaml", use = "edit" },
+    { url = "*.yml", use = "edit" },
+    { url = "*.json", use = "edit" },
     { mime = "text/*", use = "edit" },
     { mime = "image/*", use = "open" },
     { mime = "video/*", use = "open" },
     { mime = "audio/*", use = "open" },
     { mime = "inode/directory", use = "open" },
     # Fallback
-    { multiple = true, use = "open" },
+    { mime = "*", use = "open" },
 ]

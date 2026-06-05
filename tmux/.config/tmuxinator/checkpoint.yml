@@ -4,37 +4,37 @@ name: checkpoint
 root: ~/Repos/Java/Checkpoint
 
 windows:
-  - claude:
-      panes:
-        - |
-          claude
-
   - nvim:
       panes:
         - |
           nvim .
 
-  - infrastructure:
+  - infra:
       panes:
         - |
-          startdocker 
+          startdocker
           cd api
           docker compose up -d
           lazydocker
 
-  - backend:
+  - api:
       panes:
         - |
           cd api
           doppler run -- ./mvnw spring-boot:run
 
-  - frontend:
+  - web:
       panes:
         - |
           cd web
           pnpm dev
 
-  - lazygit:
+  - desktop:
+      panes:
+        - |
+          cd desktop
+
+  - git:
       panes:
         - |
           lazygit
