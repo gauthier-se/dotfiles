@@ -1,18 +1,18 @@
 theme = "Catppuccin Mocha"
 background = #1b1f2e
-background-opacity = 0.85
-background-blur-radius = 20
+background-opacity = 0.90
+background-blur-radius = 30
 
 font-family = "JetBrainsMono Nerd Font Mono"
-font-size = 13
+font-size = 14
 cursor-style = bar
 cursor-style-blink = true
 
 maximize = true
 window-decoration = true
 macos-titlebar-style = "hidden"
-window-padding-x = 5
-window-padding-y = 5
+window-padding-x = 0
+window-padding-y = 0
 
 copy-on-select = true
 mouse-hide-while-typing = true

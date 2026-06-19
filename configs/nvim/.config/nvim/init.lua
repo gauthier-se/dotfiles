@@ -963,6 +963,38 @@ require('lazy').setup({
     end,
   },
 
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require('lualine').setup {
+        options = {
+          theme = 'auto',
+          component_separators = { left = '', right = '' },
+          section_separators = { left = '', right = '' },
+        },
+        sections = {
+          lualine_a = { { 'mode', right_padding = 2 } },
+          lualine_b = { 'filename', 'branch' },
+          lualine_c = { 'fileformat' },
+          lualine_x = {},
+          lualine_y = { 'filetype', 'progress' },
+          lualine_z = {
+            { 'location', left_padding = 2 },
+          },
+        },
+        inactive_sections = {
+          lualine_a = { 'filename' },
+          lualine_b = {},
+          lualine_c = {},
+          lualine_x = {},
+          lualine_y = {},
+          lualine_z = { 'location' },
+        },
+      }
+    end,
+  },
+
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
@@ -984,21 +1016,7 @@ require('lazy').setup({
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
 
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
-
-      -- You can configure sections in the statusline by overriding their
-      -- default behavior. For example, here we set the section for
-      -- cursor location to LINE:COLUMN
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return '%2l:%-2v'
-      end
-
+      -- statusline is now handled by lualine.nvim
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
