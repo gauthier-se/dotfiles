@@ -1,0 +1,30 @@
+---
+- name: Install Arch-specific packages
+  ansible.builtin.command:
+    cmd: >
+      yay -S --needed --noconfirm hyprland waybar wofi dunst gtk3 qt5-wayland
+      qt6-wayland grim slurp ttf-jetbrains-mono-nerd brightnessctl jq
+      wl-clipboard libnotify imv kvantum qt5ct qt6ct noto-fonts noto-fonts-emoji
+      noto-fonts-cjk kvantum-theme-catppuccin-git catppuccin-sddm-theme-mocha brave-bin sddm
+  register: yay_arch
+  changed_when: "'there is nothing to do' not in yay_arch.stdout"
+
+- name: Configure SDDM
+  become: true
+  block:
+    - name: Ensure sddm conf directory exists
+      ansible.builtin.file:
+        path: /etc/sddm.conf.d
+        state: directory
+        mode: '0755'
+
+    - name: Set SDDM theme
+      ansible.builtin.copy:
+        src: "{{ configs_dir }}/sddm/sddm.conf"
+        dest: /etc/sddm.conf.d/10-theme.conf
+        mode: '0644'
+
+    - name: Enable SDDM service
+      ansible.builtin.systemd:
+        name: sddm
+        enabled: true

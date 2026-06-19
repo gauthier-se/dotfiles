@@ -1,0 +1,5 @@
+---
+- name: Install macOS specific packages (Aerospace)
+  community.general.homebrew_cask:
+    name: nikitabobko/tap/aerospace
+    state: present

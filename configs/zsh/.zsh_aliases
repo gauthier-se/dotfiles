@@ -1,0 +1,27 @@
+# Navigation
+alias ll="ls -lshA"
+alias la="ls -A"
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias c="clear"
+
+# Editors & Tools
+alias vi="nvim"
+alias mux="tmuxinator"
+alias cat="bat -p"
+alias lg="lazygit"
+alias ld="lazydocker"
+
+# Dotfiles
+alias openzs="vi ~/dotfiles/configs/zsh/.zshrc"
+alias sourcezs="source ~/.zshrc"
+
+# OS-specific
+if $IS_MACOS; then
+  alias update="brew update && brew upgrade && brew cleanup"
+  alias startdocker="orb"
+else
+  alias update="yay -Syu"
+  alias startdocker="sudo systemctl start docker"
+fi

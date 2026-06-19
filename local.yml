@@ -1,0 +1,28 @@
+---
+- name: Setup Dotfiles and System
+  hosts: local
+  gather_facts: true
+  vars:
+    configs_dir: "{{ playbook_dir }}/configs"
+  tasks:
+    - name: Run Core Tasks (macOS & Arch)
+      ansible.builtin.import_role:
+        name: core
+      tags: ['packages', 'core']
+
+    - name: Run Arch Linux Tasks
+      ansible.builtin.import_role:
+        name: arch
+      when: ansible_facts.os_family == 'Archlinux'
+      tags: ['packages', 'arch']
+
+    - name: Run macOS Tasks
+      ansible.builtin.import_role:
+        name: macos
+      when: ansible_facts.os_family == 'Darwin'
+      tags: ['packages', 'macos']
+
+    - name: Run Dotfiles Symlinking
+      ansible.builtin.import_role:
+        name: dotfiles
+      tags: ['dotfiles']

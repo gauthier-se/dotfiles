@@ -1,0 +1,71 @@
+---
+- name: Install cross-platform packages using Homebrew (macOS)
+  community.general.homebrew:
+    name:
+      - git
+      - neovim
+      - tmux
+      - yazi
+      - fzf
+      - zoxide
+      - bat
+      - git-delta
+      - lazygit
+      - lazydocker
+      - vim
+      - pure
+    state: present
+  when: ansible_facts.os_family == 'Darwin'
+
+- name: Install cross-platform packages using Ghostty Cask (macOS)
+  community.general.homebrew_cask:
+    name: ghostty
+    state: present
+    accept_external_apps: true
+  when: ansible_facts.os_family == 'Darwin'
+- name: Install cross-platform packages using Yay (Arch Linux)
+  ansible.builtin.command:
+    cmd: yay -S --needed --noconfirm git neovim tmux yazi fzf zoxide bat git-delta lazygit lazydocker vim ghostty pure-prompt
+  register: yay_core
+  changed_when: "'there is nothing to do' not in yay_core.stdout"
+  when: ansible_facts.os_family == 'Archlinux'
+  # pure-prompt is in AUR, replaces the brew package
+
+- name: Setup Oh My Zsh
+  block:
+    - name: Download Oh My Zsh install script
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+        dest: /tmp/install_ohmyzsh.sh
+        mode: '0755'
+
+    - name: Run Oh My Zsh install script
+      ansible.builtin.command:
+        cmd: /tmp/install_ohmyzsh.sh --unattended
+      args:
+        creates: "{{ ansible_facts.env.HOME }}/.oh-my-zsh"
+
+    - name: Clone Zsh plugins
+      ansible.builtin.git:
+        repo: "{{ item.repo }}"
+        dest: "{{ ansible_facts.env.HOME }}/.oh-my-zsh/custom/plugins/{{ item.name }}"
+        depth: 1
+        update: true
+      loop:
+        - { name: 'zsh-autosuggestions', repo: 'https://github.com/zsh-users/zsh-autosuggestions' }
+        - { name: 'zsh-syntax-highlighting', repo: 'https://github.com/zsh-users/zsh-syntax-highlighting' }
+        - { name: 'you-should-use', repo: 'https://github.com/MichaelAquilina/zsh-you-should-use' }
+        - { name: 'zsh-bat', repo: 'https://github.com/fdellwing/zsh-bat' }
+
+- name: Download Catppuccin syntax highlighting
+  ansible.builtin.get_url:
+    url: https://github.com/catppuccin/zsh-syntax-highlighting/raw/main/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh
+    dest: "{{ ansible_facts.env.HOME }}/.zsh/catppuccin_mocha-zsh-syntax-highlighting.zsh"
+    mode: '0644'
+
+- name: Clone TPM (Tmux Plugin Manager)
+  ansible.builtin.git:
+    repo: 'https://github.com/tmux-plugins/tpm'
+    dest: "{{ ansible_facts.env.HOME }}/.tmux/plugins/tpm"
+    depth: 1
+    update: true
