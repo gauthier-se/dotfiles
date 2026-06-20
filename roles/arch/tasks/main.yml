@@ -1,11 +1,35 @@
 ---
-- name: Install Arch-specific packages
+- name: Install official Arch packages
+  community.general.pacman:
+    name:
+      - hyprland
+      - waybar
+      - wofi
+      - dunst
+      - gtk3
+      - qt5-wayland
+      - qt6-wayland
+      - grim
+      - slurp
+      - ttf-jetbrains-mono-nerd
+      - brightnessctl
+      - jq
+      - wl-clipboard
+      - libnotify
+      - imv
+      - kvantum
+      - qt5ct
+      - qt6ct
+      - noto-fonts
+      - noto-fonts-emoji
+      - noto-fonts-cjk
+      - sddm
+    state: present
+  become: true
+
+- name: Install AUR packages using Yay
   ansible.builtin.command:
-    cmd: >
-      yay -S --needed --noconfirm hyprland waybar wofi dunst gtk3 qt5-wayland
-      qt6-wayland grim slurp ttf-jetbrains-mono-nerd brightnessctl jq
-      wl-clipboard libnotify imv kvantum qt5ct qt6ct noto-fonts noto-fonts-emoji
-      noto-fonts-cjk kvantum-theme-catppuccin-git catppuccin-sddm-theme-mocha brave-bin sddm
+    cmd: yay -S --needed --noconfirm kvantum-theme-catppuccin-git catppuccin-sddm-theme-mocha brave-bin
   register: yay_arch
   changed_when: "'there is nothing to do' not in yay_arch.stdout"
 
