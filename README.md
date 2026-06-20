@@ -57,23 +57,3 @@ The script:
 ## Theme
 
 Catppuccin Mocha across the board: terminal, editor, prompt, bar, launcher, login screen, GTK + Qt apps.
-
-## Architecture & How it works
-
-This repository has been structured according to Ansible best practices:
-
-- **`configs/`**: Contains all your actual dotfiles (hypr, nvim, zsh, tmux, etc.).
-- **`roles/`**: Contains the Ansible logic separated by domain (`core`, `arch`, `macos`, `dotfiles`).
-- **`local.yml`**: The main playbook that orchestrates the installation based on your OS.
-
-### Working with Tags
-
-Instead of running the entire provisioning process, you can use Ansible tags to execute only specific parts of the playbook:
-
-```bash
-# Only synchronize dotfiles (useful if you just tweaked a config and want to ensure symlinks are correct)
-ansible-playbook local.yml -K --tags "dotfiles"
-
-# Only install/update packages
-ansible-playbook local.yml -K --tags "packages"
-```
