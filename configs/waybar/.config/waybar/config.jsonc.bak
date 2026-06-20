@@ -5,12 +5,17 @@
     "margin-top": 8,
     "margin-left": 8,
     "margin-right": 8,
-    "spacing": 0,
+    "spacing": 4,
     "exclusive": true,
 
-    "modules-left": ["hyprland/workspaces"],
-    "modules-center": ["hyprland/window"],
-    "modules-right": ["wireplumber", "network", "cpu", "memory", "backlight", "battery", "clock", "tray"],
+    "modules-left":   ["hyprland/workspaces", "hyprland/window"],
+    "modules-center": ["clock"],
+    "modules-right":  ["group/stats", "tray"],
+
+    "group/stats": {
+        "orientation": "horizontal",
+        "modules": ["cpu", "memory", "backlight", "wireplumber", "network", "battery"]
+    },
 
     "hyprland/workspaces": {
         "format": "{icon}",
@@ -34,8 +39,8 @@
     },
 
     "clock": {
-        "format": "{:%H:%M}",
-        "format-alt": "{:%A %d %B %Y}",
+        "format": " {:%H:%M}",
+        "format-alt": " {:%A %d %B %Y}",
         "tooltip-format": "<tt><small>{calendar}</small></tt>",
         "calendar": {
             "mode": "year",
@@ -59,15 +64,6 @@
         "tooltip-format": "{used:0.1f}G / {total:0.1f}G"
     },
 
-    "network": {
-        "interface": "wlp1s0",
-        "format-wifi":       "󰤨 {signalStrength}%",
-        "format-ethernet":   "󰈀 {ipaddr}",
-        "format-disconnected": "󰤭 déconnecté",
-        "tooltip-format-wifi": "{essid}\n{ipaddr}/{cidr}\n{frequency} GHz",
-        "max-length": 30
-    },
-
     "backlight": {
         "format": "{icon} {percent}%",
         "format-icons": ["󰃞", "󰃟", "󰃠"],
@@ -83,6 +79,15 @@
         "on-scroll-up":   "wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+",
         "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-",
         "format-icons": ["󰕿", "󰖀", "󰕾"]
+    },
+
+    "network": {
+        "interface": "wlp1s0",
+        "format-wifi":       "󰤨 {signalStrength}%",
+        "format-ethernet":   "󰈀 {ipaddr}",
+        "format-disconnected": "󰤭 déconnecté",
+        "tooltip-format-wifi": "{essid}\n{ipaddr}/{cidr}\n{frequency} GHz",
+        "max-length": 30
     },
 
     "battery": {

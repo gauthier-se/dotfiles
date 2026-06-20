@@ -1,148 +1,111 @@
-/* Catppuccin Mocha */
-@define-color base     #1e1e2e;
-@define-color mantle   #181825;
-@define-color surface0 #313244;
-@define-color surface1 #45475a;
-@define-color overlay0 #6c7086;
-@define-color text     #cdd6f4;
-@define-color subtext0 #a6adc8;
-@define-color blue     #89b4fa;
-@define-color lavender #b4befe;
-@define-color sapphire #74c7ec;
-@define-color sky      #89dceb;
-@define-color teal     #94e2d5;
-@define-color green    #a6e3a1;
-@define-color yellow   #f9e2af;
-@define-color peach    #fab387;
-@define-color red      #f38ba8;
-@define-color mauve    #cba6f7;
+@import "mocha.css";
 
 * {
-    font-family: "JetBrainsMono Nerd Font Mono", monospace;
-    font-size: 13px;
-    border: none;
-    border-radius: 0;
-    min-height: 0;
+  font-family: "JetBrainsMono Nerd Font Mono", monospace;
+  font-size: 13px;
+  min-height: 0;
 }
 
-window#waybar {
-    background-color: alpha(@base, 0.92);
-    color: @text;
-    border-radius: 12px;
-    border: 1px solid @surface0;
+#waybar {
+  background: transparent;
+  color: @text;
 }
-
-/* ── Sections ─────────────────────────────────────── */
-
-.modules-left,
-.modules-right {
-    padding: 0 6px;
-}
-
-.modules-center {
-    padding: 0 4px;
-}
-
-/* ── Workspaces ──────────────────────────────────── */
 
 #workspaces {
-    margin: 0 6px;
-    padding: 0 4px;
+  border-radius: 1rem;
+  background-color: @surface0;
+  margin: 0;
 }
 
 #workspaces button {
-    padding: 0 6px;
-    font-size: 11px;
-    color: @surface1;
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    margin: 0;
-    transition: color 0.2s ease, transform 0.2s ease;
-}
-
-#workspaces button:hover {
-    color: @overlay0;
-    background: transparent;
-    box-shadow: none;
-    text-shadow: none;
+  color: @surface1;
+  border-radius: 1rem;
+  padding: 0.4rem 0.6rem;
+  font-size: 11px;
 }
 
 #workspaces button.active {
-    color: @blue;
-    font-size: 13px;
+  color: @flamingo;
+  border-radius: 1rem;
+  font-size: 13px;
+}
+
+#workspaces button:hover {
+  color: @overlay0;
+  border-radius: 1rem;
+  background: transparent;
+  box-shadow: none;
+  text-shadow: none;
 }
 
 #workspaces button.urgent {
-    color: @red;
+  color: @red;
 }
-
-/* ── Window title ────────────────────────────────── */
 
 #window {
-    color: @subtext0;
-    padding: 0 8px;
-    font-style: italic;
+  background-color: @surface0;
+  padding: 0.5rem 1rem;
+  margin: 0 1rem;
+  border-radius: 1rem;
+  color: @subtext0;
+  font-style: italic;
 }
 
-/* ── Clock ───────────────────────────────────────── */
-
-#clock {
-    color: @lavender;
-    font-weight: bold;
-    padding: 0 14px;
+window#waybar.empty #window {
+  background: transparent;
+  padding: 0;
+  margin: 0;
 }
 
-/* ── Right modules shared ────────────────────────── */
-
-/* Stats group: single unified pill containing cpu/mem/backlight/wireplumber/network/battery */
-#stats {
-    background: @surface0;
-    border-radius: 10px;
-    margin: 4px 0;
-    padding: 0 4px;
-}
-
-#cpu,
-#memory,
+#tray,
 #backlight,
+#clock,
+#battery,
 #wireplumber,
 #network,
-#battery {
-    padding: 2px 10px;
-    margin: 0;
-    background: transparent;
-    border-radius: 0;
-}
-
-/* Subtle separators between logical groups: system | hardware | connectivity */
-#backlight,
-#network {
-    border-left: 1px solid alpha(@overlay0, 0.35);
-    margin-left: 2px;
-    padding-left: 12px;
-}
-
-/* ── Per-module colors ───────────────────────────── */
-
-#cpu {
-    color: @green;
-}
-
-#cpu.high {
-    color: @red;
-}
-
+#cpu,
 #memory {
-    color: @sapphire;
+  background-color: @surface0;
+  padding: 0.5rem 1rem;
+  margin: 0;
+}
+
+#clock {
+  color: @blue;
+  border-radius: 0px 1rem 1rem 0px;
+  font-weight: bold;
+}
+
+#battery {
+  color: @green;
+  border-radius: 0;
+}
+
+#battery.charging {
+  color: @teal;
+}
+
+#battery.warning:not(.charging) {
+  color: @yellow;
+}
+
+#battery.critical:not(.charging) {
+  color: @red;
+  animation: blink 1s linear infinite alternate;
+}
+
+@keyframes blink {
+    to { opacity: 0.4; }
 }
 
 #backlight {
-    color: @yellow;
+  color: @yellow;
+  border-radius: 0;
 }
 
 #wireplumber {
-    color: @mauve;
+  color: @maroon;
+  border-radius: 1rem 0px 0px 1rem;
 }
 
 #wireplumber.muted {
@@ -150,38 +113,31 @@ window#waybar {
 }
 
 #network {
-    color: @blue;
+  color: @blue;
+  border-radius: 0;
 }
 
 #network.disconnected {
-    color: @red;
+  color: @red;
 }
 
-#battery {
-    color: @green;
+#cpu {
+  color: @green;
+  border-radius: 0;
 }
 
-#battery.charging {
-    color: @teal;
+#cpu.high {
+  color: @red;
 }
 
-#battery.warning:not(.charging) {
-    color: @yellow;
-}
-
-#battery.critical:not(.charging) {
-    color: @red;
-    animation: blink 1s linear infinite alternate;
-}
-
-@keyframes blink {
-    to { opacity: 0.4; }
+#memory {
+  color: @sapphire;
+  border-radius: 0;
 }
 
 #tray {
-    background: transparent;
-    padding: 2px 6px;
-    margin-left: 8px;
+  margin-left: 1rem;
+  border-radius: 1rem;
 }
 
 #tray > .passive {
