@@ -31,7 +31,7 @@
   ansible.builtin.lineinfile:
     path: /etc/sudoers.d/10-ansible-pacman
     line: "{{ ansible_user_id }} ALL=(ALL) NOPASSWD: /usr/bin/pacman"
-    create: yes
+    create: true
     mode: "0440"
     validate: "visudo -cf %s"
   become: true
