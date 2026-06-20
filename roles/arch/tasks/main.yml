@@ -27,11 +27,26 @@
     state: present
   become: true
 
+- name: Allow pacman passwordless sudo temporarily for yay
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers.d/10-ansible-pacman
+    line: "{{ ansible_user_id }} ALL=(ALL) NOPASSWD: /usr/bin/pacman"
+    create: yes
+    mode: "0440"
+    validate: "visudo -cf %s"
+  become: true
+
 - name: Install AUR packages using Yay
   ansible.builtin.command:
     cmd: yay -S --needed --noconfirm kvantum-theme-catppuccin-git catppuccin-sddm-theme-mocha brave-bin
   register: yay_arch
   changed_when: "'there is nothing to do' not in yay_arch.stdout"
+
+- name: Remove temporary pacman sudoers rule
+  ansible.builtin.file:
+    path: /etc/sudoers.d/10-ansible-pacman
+    state: absent
+  become: true
 
 - name: Configure SDDM
   become: true
@@ -40,13 +55,13 @@
       ansible.builtin.file:
         path: /etc/sddm.conf.d
         state: directory
-        mode: '0755'
+        mode: "0755"
 
     - name: Set SDDM theme
       ansible.builtin.copy:
         src: "{{ configs_dir }}/sddm/sddm.conf"
         dest: /etc/sddm.conf.d/10-theme.conf
-        mode: '0644'
+        mode: "0644"
 
     - name: Enable SDDM service
       ansible.builtin.systemd:
