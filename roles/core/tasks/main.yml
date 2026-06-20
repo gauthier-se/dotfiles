@@ -23,13 +23,31 @@
     state: present
     accept_external_apps: true
   when: ansible_facts.os_family == 'Darwin'
-- name: Install cross-platform packages using Yay (Arch Linux)
-  ansible.builtin.command:
-    cmd: yay -S --needed --noconfirm git neovim tmux yazi fzf zoxide bat git-delta lazygit lazydocker vim ghostty zsh-pure-prompt
-  register: yay_core
-  changed_when: "'there is nothing to do' not in yay_core.stdout"
+- name: Install official cross-platform packages (Arch Linux)
+  community.general.pacman:
+    name:
+      - git
+      - neovim
+      - tmux
+      - yazi
+      - fzf
+      - zoxide
+      - bat
+      - git-delta
+      - lazygit
+      - lazydocker
+      - vim
+      - ghostty
+    state: present
+  become: true
   when: ansible_facts.os_family == 'Archlinux'
-  # pure-prompt is in AUR, replaces the brew package
+
+- name: Install Pure prompt (Arch Linux)
+  ansible.builtin.git:
+    repo: https://github.com/sindresorhus/pure.git
+    dest: ~/.zsh/pure
+    depth: 1
+  when: ansible_facts.os_family == 'Archlinux'
 
 - name: Setup Oh My Zsh
   block:
