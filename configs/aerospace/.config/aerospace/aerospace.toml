@@ -1,9 +1,9 @@
 config-version = 2
 start-at-login = true
 
-# Launch JankyBorders on startup (Catppuccin Flamingo and Peach gradient)
+# Launch JankyBorders on startup (Catppuccin Mauve)
 after-startup-command = [
-    'exec-and-forget borders active_color="gradient(top_left=0xfff2cdcd,bottom_right=0xfffab387)" inactive_color=0xff45475a width=8.0'
+    'exec-and-forget borders active_color=0xffcba6f7 inactive_color=0xff45475a width=8.0'
 ]
 
 # Normalizations (see https://nikitabobko.github.io/AeroSpace/guide#normalization)
