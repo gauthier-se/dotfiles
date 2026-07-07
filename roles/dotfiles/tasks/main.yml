@@ -70,5 +70,5 @@
     - { pkg: zsh, src: .zsh_aliases, dest: .zsh_aliases }
     - { pkg: zsh, src: .zsh_functions, dest: .zsh_functions }
     - { pkg: git, src: .gitconfig, dest: .gitconfig }
-    - { pkg: git, src: catppuccin.gitconfig, dest: catppuccin.gitconfig }
+    - { pkg: git, src: moonfly.gitconfig, dest: moonfly.gitconfig }
     - { pkg: tmux, src: .local/bin/tmux-sessionizer.sh, dest: .local/bin/tmux-sessionizer.sh }

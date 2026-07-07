@@ -5,22 +5,22 @@ git:
 gui:
   theme:
     activeBorderColor:
-      - "#cba6f7"
+      - "#80a0ff"
       - bold
     inactiveBorderColor:
-      - "#6c7086"
+      - "#626262"
     selectedLineBgColor:
-      - "#313244"
+      - "#1c1c1c"
     optionsTextColor:
-      - "#89b4fa"
+      - "#79dac8"
     cherryPickedCommitBgColor:
-      - "#45475a"
+      - "#262626"
     cherryPickedCommitFgColor:
-      - "#cba6f7"
+      - "#80a0ff"
     unstagedChangesColor:
-      - "#f38ba8"
+      - "#ff5454"
     defaultFgColor:
-      - "#cdd6f4"
+      - "#bdbdbd"
 
 keybinding:
   universal:

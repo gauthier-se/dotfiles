@@ -1,0 +1,25 @@
+[delta "moonfly"]
+	blame-palette = "#080808 #121212 #1c1c1c #262626 #303030"
+	commit-decoration-style = "#626262" bold box ul
+	dark = true
+	file-decoration-style = "#626262"
+	file-style = "#bdbdbd"
+	hunk-header-decoration-style = "#626262" box ul
+	hunk-header-file-style = bold
+	hunk-header-line-number-style = bold "#949494"
+	hunk-header-style = file line-number syntax
+	line-numbers-left-style = "#626262"
+	line-numbers-minus-style = bold "#ff5454"
+	line-numbers-plus-style = bold "#8cc85f"
+	line-numbers-right-style = "#626262"
+	line-numbers-zero-style = "#626262"
+	minus-emph-style = bold syntax "#4a1a1a"
+	minus-style = syntax "#2a1010"
+	plus-emph-style = bold syntax "#1c3010"
+	plus-style = syntax "#132008"
+	map-styles = \
+		bold purple => syntax "#2a1c40", \
+		bold blue => syntax "#101c40", \
+		bold cyan => syntax "#0c2a28", \
+		bold yellow => syntax "#332c10"
+	syntax-theme = Nord

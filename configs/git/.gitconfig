@@ -24,7 +24,7 @@ ui = auto
 diffFilter = delta --color-only
 
 [delta]
-features = catppuccin-mocha
+features = moonfly
 navigate = true
 line-numbers = true
 side-by-side = false
@@ -36,7 +36,7 @@ conflictstyle = zdiff3
 colorMoved = zebra
 
 [include]
-path = ~/dotfiles/git/catppuccin.gitconfig
+path = ~/moonfly.gitconfig
 [credential "https://github.com"]
 	helper = 
 	helper = !/opt/homebrew/bin/gh auth git-credential

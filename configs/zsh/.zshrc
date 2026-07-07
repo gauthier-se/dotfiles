@@ -18,8 +18,7 @@ export PATH="$HOME/.opencode/bin:$PATH"
 
 if $IS_MACOS; then
   export PATH="/Users/gauthierseyzeriat/.antigravity-ide/antigravity-ide/bin:$PATH"
-  export PATH="/opt/anaconda3/bin:$PATH"
-  
+
   # Bun
   export BUN_INSTALL="$HOME/.bun"
   export PATH="$BUN_INSTALL/bin:$PATH"
