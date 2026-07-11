@@ -14,11 +14,14 @@
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
   };
 
-  outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager, nix-homebrew }: {
+  outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager, nix-homebrew }:
+  let
+    user = "segau";
+  in {
     # Name matches LocalHostName: darwin-rebuild picks it up automatically.
-    darwinConfigurations."Gauthiers-MacBook-Pro" = nix-darwin.lib.darwinSystem {
+    darwinConfigurations."segaus-MacBook-Pro" = nix-darwin.lib.darwinSystem {
       system = "aarch64-darwin";
-      specialArgs = { inherit inputs; };
+      specialArgs = { inherit inputs user; };
       modules = [
         ./darwin/configuration.nix
 
@@ -26,9 +29,7 @@
         {
           nix-homebrew = {
             enable = true;
-            user = "gauthierseyzeriat";
-            # Take over the existing Homebrew installation (/opt/homebrew)
-            autoMigrate = true;
+            inherit user;
           };
         }
 
@@ -38,7 +39,7 @@
             useGlobalPkgs = true;
             useUserPackages = true;
             backupFileExtension = "before-nix";
-            users.gauthierseyzeriat = import ./home/home.nix;
+            users.${user} = import ./home/home.nix;
           };
         }
       ];

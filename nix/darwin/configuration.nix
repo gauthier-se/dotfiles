@@ -1,14 +1,14 @@
-{ pkgs, ... }:
+{ pkgs, user, ... }:
 
 {
   # Nix itself is managed by the Determinate installer, not by nix-darwin.
   nix.enable = false;
 
   system.stateVersion = 6;
-  system.primaryUser = "gauthierseyzeriat";
+  system.primaryUser = user;
   nixpkgs.hostPlatform = "aarch64-darwin";
 
-  users.users.gauthierseyzeriat.home = "/Users/gauthierseyzeriat";
+  users.users.${user}.home = "/Users/${user}";
 
   # Adds Nix paths to zsh's PATH
   programs.zsh.enable = true;
@@ -52,17 +52,15 @@
 
   # Apply the wallpaper from the repo on every rebuild
   system.activationScripts.postActivation.text = ''
-    sudo -u gauthierseyzeriat /usr/bin/osascript -e 'tell application "System Events" to tell every desktop to set picture to "/Users/gauthierseyzeriat/dotfiles/wallpapers/wallpaper.jpg"' || true
+    sudo -u ${user} /usr/bin/osascript -e 'tell application "System Events" to tell every desktop to set picture to "/Users/${user}/dotfiles/wallpapers/wallpaper.jpg"' || true
   '';
 
   homebrew = {
     enable = true;
     onActivation = {
       autoUpdate = false;
-      # ⚠️ "none" while still on the current system (233 formulae installed).
-      # After the clean reinstall, switch to "zap" so brew only contains
-      # what is declared here.
-      cleanup = "none";
+      # Fresh install: brew only ever contains what is declared here.
+      cleanup = "zap";
     };
     taps = [ "nikitabobko/tap" ];
     brews = [ "mas" ];
