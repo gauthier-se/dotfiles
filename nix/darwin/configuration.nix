@@ -49,6 +49,11 @@
     };
   };
 
+  # Apply the wallpaper from the repo on every rebuild
+  system.activationScripts.postActivation.text = ''
+    sudo -u gauthierseyzeriat /usr/bin/osascript -e 'tell application "System Events" to tell every desktop to set picture to "/Users/gauthierseyzeriat/dotfiles/wallpapers/wallpaper.jpg"' || true
+  '';
+
   homebrew = {
     enable = true;
     onActivation = {
@@ -65,6 +70,7 @@
       "nikitabobko/tap/aerospace"
       "alacritty"
       "raycast"
+      "ubersicht"
       # Apps
       "brave-browser"
       "obsidian"
