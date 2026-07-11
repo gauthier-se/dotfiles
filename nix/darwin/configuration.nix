@@ -65,16 +65,12 @@
       cleanup = "none";
     };
     taps = [ "nikitabobko/tap" ];
-    brews = [
-      "mas"
-      "ical-buddy" # not in nixpkgs; used by the ubersicht next-event widget
-    ];
+    brews = [ "mas" ];
     casks = [
       # Desktop
       "nikitabobko/tap/aerospace"
       "alacritty"
       "raycast"
-      "ubersicht"
       # Apps
       "brave-browser"
       "obsidian"
