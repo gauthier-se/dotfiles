@@ -54,15 +54,37 @@
       cleanup = "none";
     };
     taps = [ "nikitabobko/tap" ];
+    brews = [ "mas" ];
     casks = [
+      # Desktop
       "nikitabobko/tap/aerospace"
       "alacritty"
-      "alt-tab"
-      "maccy"
-      "stats"
-      # GUI apps to reinstall as needed after the clean install:
-      # "brave-browser" "obsidian" "raycast" "orbstack" "discord"
-      # "tailscale" "dashlane" "claude" "figma" "linear-linear"
+      "raycast"
+      # Apps
+      "brave-browser"
+      "obsidian"
+      "orbstack"
+      "discord"
+      "tailscale-app"
+      "claude"
+      "figma"
+      "linear"
+      "protonvpn"
+      "bruno"
+      "termius"
+      "microsoft-teams"
+      "microsoft-word"
+      # "microsoft-excel" "microsoft-powerpoint" "microsoft-outlook"
+      # Gaming & music
+      "openemu"
+      "dolphin"
+      "steam"
+      "battle-net"
+      "native-access" # installs Guitar Rig 7 and other NI products
     ];
+    # Mac App Store (needs to be signed in)
+    masApps = {
+      "Dashlane" = 517914548;
+    };
   };
 }
