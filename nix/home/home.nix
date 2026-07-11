@@ -11,7 +11,6 @@ in
   home.packages = with pkgs; [
     # Everyday CLI
     bat
-    ical-buddy # used by the ubersicht next-event widget
     btop
     fastfetch
     fd
