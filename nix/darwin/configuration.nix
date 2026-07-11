@@ -42,6 +42,7 @@
       CreateDesktop = false; # no icons/folders on the desktop
     };
     NSGlobalDomain = {
+      AppleInterfaceStyle = "Dark";
       KeyRepeat = 2;
       InitialKeyRepeat = 15;
       NSAutomaticSpellingCorrectionEnabled = false;
