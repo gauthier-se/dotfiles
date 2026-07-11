@@ -79,7 +79,7 @@ alt-f = 'fullscreen'
 
 # Launchers
 alt-b = 'exec-and-forget open -na "Brave Browser" --args --new-window'
-alt-x = 'exec-and-forget open -na Ghostty'
+alt-x = 'exec-and-forget open -na Alacritty'
 
 # Service mode (reload, reset, floating toggle, etc.)
 alt-shift-space = 'mode service'
