@@ -14,83 +14,81 @@ export BAT_THEME="base16"
 
 # Base PATHs
 export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/.opencode/bin:$PATH"
 
-if $IS_MACOS; then
-  export PATH="/Users/gauthierseyzeriat/.antigravity-ide/antigravity-ide/bin:$PATH"
+# ==============================================================================
+# 2. Zinit & Plugins
+# ==============================================================================
 
-  # Bun
-  export BUN_INSTALL="$HOME/.bun"
-  export PATH="$BUN_INSTALL/bin:$PATH"
-  [ -s "$BUN_INSTALL/_bun" ] && source "$BUN_INSTALL/_bun"
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+if [ ! -d "$ZINIT_HOME" ]; then
+  mkdir -p "$(dirname "$ZINIT_HOME")"
+  git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 fi
-
-# ==============================================================================
-# 2. Oh My Zsh & Prompt
-# ==============================================================================
-
-export ZSH="$HOME/.oh-my-zsh"
-DISABLE_AUTO_TITLE="true"
-ZSH_THEME=""
-
-# Note: The 'nvm' plugin automatically sources NVM for you
-plugins=(
-  git
-  nvm
-  you-should-use
-  zsh-autosuggestions
-  zsh-bat
-  zsh-syntax-highlighting
-)
-
-source $ZSH/oh-my-zsh.sh
+source "${ZINIT_HOME}/zinit.zsh"
 
 # Pure prompt
-if $IS_MACOS; then
-  fpath+=("$(brew --prefix)/share/zsh/site-functions")
-else
-  fpath+=("$HOME/.zsh/pure")
-fi
-autoload -U promptinit; promptinit
-prompt pure
+zinit ice pick"async.zsh" src"pure.zsh"
+zinit light sindresorhus/pure
 
-# Catppuccin Mocha syntax highlighting
-source ~/.zsh/catppuccin_mocha-zsh-syntax-highlighting.zsh
+# Plugins
+zinit light zsh-users/zsh-syntax-highlighting
+zinit light zsh-users/zsh-completions
+zinit light zsh-users/zsh-autosuggestions
+zinit light Aloxaf/fzf-tab
+zinit light MichaelAquilina/zsh-you-should-use
+
+# Oh My Zsh snippets (aliases git, etc.)
+zinit snippet OMZP::git
+
+# Completions
+autoload -Uz compinit && compinit
+zinit cdreplay -q
 
 # ==============================================================================
-# 3. Integrations (fzf, zoxide, etc.)
+# 3. Keybindings & History
 # ==============================================================================
 
-# fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+bindkey -e
+bindkey '^p' history-search-backward
+bindkey '^n' history-search-forward
 
-# Zoxide
+HISTSIZE=10000
+HISTFILE="$HOME/.zsh_history"
+SAVEHIST=$HISTSIZE
+HISTDUP=erase
+setopt appendhistory
+setopt sharehistory
+setopt hist_ignore_space
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
+setopt hist_ignore_dups
+setopt hist_find_no_dups
+
+# ==============================================================================
+# 4. Completion styling
+# ==============================================================================
+
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' menu no
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
+
+# ==============================================================================
+# 5. Integrations (fzf, zoxide, direnv)
+# ==============================================================================
+
+eval "$(fzf --zsh)"
 eval "$(zoxide init zsh)"
-
-# ==============================================================================
-# 4. macOS Specific Tools (OrbStack, SDKMAN, Conda)
-# ==============================================================================
+command -v direnv >/dev/null && eval "$(direnv hook zsh)"
 
 if $IS_MACOS; then
   # OrbStack
   source ~/.orbstack/shell/init.zsh 2>/dev/null || :
-
-  # SDKMAN
-  export SDKMAN_DIR="$HOME/.sdkman"
-  [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
-
-  # Conda
-  __conda_setup="$('/opt/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-  if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-  elif [ -f "/opt/anaconda3/etc/profile.d/conda.sh" ]; then
-    . "/opt/anaconda3/etc/profile.d/conda.sh"
-  fi
-  unset __conda_setup
 fi
 
 # ==============================================================================
-# 5. Aliases & Functions
+# 6. Aliases & Functions
 # ==============================================================================
 
 [ -f ~/.zsh_aliases ] && source ~/.zsh_aliases

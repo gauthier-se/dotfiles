@@ -19,7 +19,7 @@ alias sourcezs="source ~/.zshrc"
 
 # OS-specific
 if $IS_MACOS; then
-  alias update="brew update && brew upgrade && brew cleanup"
+  alias update="sudo darwin-rebuild switch --flake ~/dotfiles/nix"
   alias startdocker="orb"
 else
   alias update="yay -Syu"
