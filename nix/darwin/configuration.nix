@@ -39,6 +39,7 @@
       AppleShowAllExtensions = true;
       ShowPathbar = true;
       FXPreferredViewStyle = "Nlsv";
+      CreateDesktop = false; # no icons/folders on the desktop
     };
     NSGlobalDomain = {
       KeyRepeat = 2;
