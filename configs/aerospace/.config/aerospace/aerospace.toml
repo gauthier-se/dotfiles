@@ -1,10 +1,7 @@
 config-version = 2
 start-at-login = true
 
-# Launch JankyBorders on startup (Moonfly Gray)
-after-startup-command = [
-    'exec-and-forget borders active_color=0xff626262 inactive_color=0xff262626 width=8.0'
-]
+# JankyBorders (Moonfly Gray) is started by nix-darwin (services.jankyborders)
 
 # Normalizations (see https://nikitabobko.github.io/AeroSpace/guide#normalization)
 enable-normalization-flatten-containers = true
