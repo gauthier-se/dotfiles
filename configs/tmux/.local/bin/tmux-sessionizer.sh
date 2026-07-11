@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# 1. List directories in ~/Repos (only depth 2, e.g., Repos/Java/Project)
-selected=$(find ~/Repos -mindepth 2 -maxdepth 2 -type d | fzf)
+# 1. List projects in ~/Repos (flat layout: Repos/<project>)
+selected=$(find ~/Repos -mindepth 1 -maxdepth 1 -type d | fzf)
 
 # If we exit fzf without choosing anything, stop the script
 if [[ -z $selected ]]; then
