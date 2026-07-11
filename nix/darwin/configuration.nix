@@ -43,6 +43,7 @@
     };
     finder = {
       AppleShowAllExtensions = true;
+      AppleShowAllFiles = true; # show hidden files (dotfiles)
       ShowPathbar = true;
       FXPreferredViewStyle = "Nlsv";
       CreateDesktop = false; # no icons/folders on the desktop
