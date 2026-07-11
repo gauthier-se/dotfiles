@@ -2,7 +2,7 @@
 
 let
   dotfiles = "${config.home.homeDirectory}/dotfiles";
-  # Symlinks into the repo (editable without rebuild, shared with Ansible/Arch)
+  # Symlinks into the repo (editable without a rebuild)
   link = path: config.lib.file.mkOutOfStoreSymlink "${dotfiles}/${path}";
 in
 {

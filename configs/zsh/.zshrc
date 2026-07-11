@@ -2,9 +2,6 @@
 # 1. Environment & Paths
 # ==============================================================================
 
-# Detect OS
-[[ "$OSTYPE" == "darwin"* ]] && IS_MACOS=true || IS_MACOS=false
-
 # XDG base dirs
 export XDG_CONFIG_HOME="$HOME/.config"
 
@@ -82,10 +79,8 @@ eval "$(fzf --zsh)"
 eval "$(zoxide init zsh)"
 command -v direnv >/dev/null && eval "$(direnv hook zsh)"
 
-if $IS_MACOS; then
-  # OrbStack
-  source ~/.orbstack/shell/init.zsh 2>/dev/null || :
-fi
+# OrbStack
+source ~/.orbstack/shell/init.zsh 2>/dev/null || :
 
 # ==============================================================================
 # 6. Aliases & Functions

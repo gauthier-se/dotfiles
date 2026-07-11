@@ -47,4 +47,3 @@ No runtime is installed globally, except a Node LTS for `npx` and agent CLIs.
 
 - `homebrew.onActivation.cleanup` is set to `"none"` during the migration;
   switch it to `"zap"` after the clean reinstall.
-- Arch Linux is still provisioned by Ansible (`../local.yml`); both share `../configs/`.

@@ -17,11 +17,6 @@ alias ld="lazydocker"
 alias openzs="vi ~/dotfiles/configs/zsh/.zshrc"
 alias sourcezs="source ~/.zshrc"
 
-# OS-specific
-if $IS_MACOS; then
-  alias update="sudo darwin-rebuild switch --flake ~/dotfiles/nix"
-  alias startdocker="orb"
-else
-  alias update="yay -Syu"
-  alias startdocker="sudo systemctl start docker"
-fi
+# System
+alias update="sudo darwin-rebuild switch --flake ~/dotfiles/nix"
+alias startdocker="orb"
