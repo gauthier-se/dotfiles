@@ -27,6 +27,12 @@
   };
 
   system.defaults = {
+    CustomUserPreferences = {
+      # Raycast on Cmd+Space (49 = space keycode)
+      "com.raycast.macos".raycastGlobalHotkey = "Command-49";
+      # Disable Spotlight's Cmd+Space (symbolic hotkey 64) so Raycast owns it
+      "com.apple.symbolichotkeys".AppleSymbolicHotKeys."64".enabled = false;
+    };
     dock = {
       # Effectively disable the Dock: auto-hide with a huge reveal delay
       autohide = true;
