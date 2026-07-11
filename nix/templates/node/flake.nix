@@ -17,6 +17,9 @@
             packages = with pkgs; [
               nodejs_22
               pnpm
+              typescript-language-server
+              prettierd
+              eslint_d
             ];
           };
         });

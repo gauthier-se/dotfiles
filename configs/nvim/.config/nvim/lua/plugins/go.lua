@@ -8,7 +8,7 @@ return {
     },
     event = { 'CmdlineEnter' },
     ft = { 'go', 'gomod' },
-    build = ':lua require("go.install").update_all_sync()', -- installs all needed Go tools
+    -- No build step: go tools (gopls, goimports, delve…) come from the project's nix devshell
     config = function()
       require('go').setup()
 

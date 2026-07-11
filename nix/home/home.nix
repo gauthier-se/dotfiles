@@ -32,6 +32,10 @@ in
     neovim
     tmux
     tmuxinator
+    # Editor tooling that isn't project-specific (project LSPs live in devshells)
+    lua-language-server # nvim config
+    stylua
+    nixd # nix files
     # Baseline runtime — projects use their own version via devshells
     nodejs_22
   ];

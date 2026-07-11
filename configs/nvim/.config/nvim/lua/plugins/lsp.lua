@@ -12,9 +12,6 @@ return {
   { -- Main LSP configuration
     'neovim/nvim-lspconfig',
     dependencies = {
-      { 'mason-org/mason.nvim', opts = {} },
-      'mason-org/mason-lspconfig.nvim',
-      'WhoIsSethDaniel/mason-tool-installer.nvim',
       { 'j-hui/fidget.nvim', opts = {} },
       'saghen/blink.cmp',
     },
@@ -94,15 +91,19 @@ return {
 
       local capabilities = require('blink.cmp').get_lsp_capabilities()
 
+      -- No Mason: language servers come from the PATH — either the project's
+      -- nix devshell (direnv) or home.packages. Only running what exists.
       local servers = {
-        clangd = {},
-        gopls = {},
-        ts_ls = {},
-        tailwindcss = {},
-        cssls = {},
-        html = {},
-        emmet_ls = {},
+        clangd = { bin = 'clangd' },
+        gopls = { bin = 'gopls' },
+        ts_ls = { bin = 'typescript-language-server' },
+        tailwindcss = { bin = 'tailwindcss-language-server' },
+        cssls = { bin = 'vscode-css-language-server' },
+        html = { bin = 'vscode-html-language-server' },
+        emmet_ls = { bin = 'emmet-ls' },
+        nixd = { bin = 'nixd' },
         lua_ls = {
+          bin = 'lua-language-server',
           settings = {
             Lua = {
               completion = {
@@ -113,26 +114,15 @@ return {
         },
       }
 
-      local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, {
-        'stylua',
-        'prettierd',
-        'prettier',
-        'eslint_d',
-      })
-      require('mason-tool-installer').setup { ensure_installed = ensure_installed }
-
-      require('mason-lspconfig').setup {
-        ensure_installed = {}, -- installs handled by mason-tool-installer above
-        automatic_installation = false,
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
-        },
-      }
+      for name, server in pairs(servers) do
+        if vim.fn.executable(server.bin) == 1 then
+          vim.lsp.config(name, {
+            capabilities = capabilities,
+            settings = server.settings,
+          })
+          vim.lsp.enable(name)
+        end
+      end
     end,
   },
 }

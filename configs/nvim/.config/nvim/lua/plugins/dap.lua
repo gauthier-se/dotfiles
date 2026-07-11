@@ -4,8 +4,6 @@ return {
     dependencies = {
       'rcarriga/nvim-dap-ui',
       'nvim-neotest/nvim-nio',
-      'mason-org/mason.nvim',
-      'jay-babu/mason-nvim-dap.nvim',
       'leoluz/nvim-dap-go',
     },
     keys = {
@@ -63,14 +61,7 @@ return {
       local dap = require 'dap'
       local dapui = require 'dapui'
 
-      require('mason-nvim-dap').setup {
-        automatic_installation = true,
-        handlers = {},
-        ensure_installed = {
-          'delve',
-        },
-      }
-
+      -- delve comes from the project's nix devshell (no Mason)
       dapui.setup {
         icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
         controls = {
