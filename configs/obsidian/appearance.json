@@ -1,0 +1,10 @@
+{
+  "accentColor": "",
+  "cssTheme": "Minimal",
+  "theme": "system",
+  "showViewHeader": true,
+  "showRibbon": false,
+  "translucency": false,
+  "interfaceFontFamily": "Inter",
+  "textFontFamily": "Inter"
+}

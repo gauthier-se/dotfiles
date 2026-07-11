@@ -49,6 +49,7 @@ in
     "moonfly.gitconfig".source = link "configs/git/moonfly.gitconfig";
     ".vimrc".source = link "configs/vim/.vimrc";
     ".local/bin/tmux-sessionizer.sh".source = link "configs/tmux/.local/bin/tmux-sessionizer.sh";
+    ".local/bin/obsidian-vault-setup".source = link "configs/obsidian/vault-setup.sh";
   };
 
   xdg.configFile = {
