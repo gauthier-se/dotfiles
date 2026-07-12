@@ -49,7 +49,6 @@
       InitialKeyRepeat = 15;
       NSAutomaticSpellingCorrectionEnabled = false;
       NSAutomaticCapitalizationEnabled = false;
-      _HIHideMenuBar = true; # auto-hide the menu bar (reveal by pushing the cursor to the top)
     };
   };
 
