@@ -28,6 +28,8 @@ in
     delta
     lazygit
     lazydocker
+    # Desktop
+    jankyborders # started by aerospace
     # Editors & multiplexer
     neovim
     tmux

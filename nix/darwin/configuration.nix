@@ -18,13 +18,8 @@
     nerd-fonts.symbols-only
   ];
 
-  # JankyBorders as a launchd service (replaces the exec-and-forget in aerospace.toml)
-  services.jankyborders = {
-    enable = true;
-    active_color = "0xff626262";
-    inactive_color = "0xff262626";
-    width = 8.0;
-  };
+  # JankyBorders is started by aerospace (after-startup-command) — the launchd
+  # service kept dying with EX_CONFIG on this machine.
 
   system.defaults = {
     CustomUserPreferences = {

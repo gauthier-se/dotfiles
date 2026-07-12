@@ -1,7 +1,10 @@
 config-version = 2
 start-at-login = true
 
-# JankyBorders (Moonfly Gray) is started by nix-darwin (services.jankyborders)
+# Launch JankyBorders on startup (Moonfly Gray) — binary from home.packages
+after-startup-command = [
+    'exec-and-forget borders active_color=0xff626262 inactive_color=0xff262626 width=8.0'
+]
 
 # Normalizations (see https://nikitabobko.github.io/AeroSpace/guide#normalization)
 enable-normalization-flatten-containers = true
@@ -14,7 +17,8 @@ default-root-container-orientation = 'auto'
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 automatically-unhide-macos-hidden-apps = false
 
-persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+# Workspace 5 removed: Option+5 / Option+Shift+5 type AZERTY braces/brackets
+persistent-workspaces = ["1", "2", "3", "4", "6", "7", "8", "9", "10"]
 
 [key-mapping]
 preset = 'qwerty'
@@ -87,6 +91,7 @@ alt-shift-space = 'mode service'
 [mode.service.binding]
 esc       = ['reload-config', 'mode main']
 r         = ['flatten-workspace-tree', 'mode main']
+b         = ['balance-sizes', 'mode main']
 f         = ['layout floating tiling', 'mode main']
 backspace = ['close-all-windows-but-current', 'mode main']
 
@@ -100,9 +105,12 @@ alt-shift-l = ['join-with right', 'mode main']
 2 = 'main'
 3 = 'main'
 4 = 'main'
-5 = 'main'
 6 = 'secondary'
 7 = 'secondary'
 8 = 'secondary'
 9 = 'secondary'
 10 = 'secondary'
+
+# Make nix-managed binaries (borders…) visible to exec-and-forget
+[exec.env-vars]
+PATH = '/etc/profiles/per-user/segau/bin:/run/current-system/sw/bin:/opt/homebrew/bin:/usr/bin:/bin'
