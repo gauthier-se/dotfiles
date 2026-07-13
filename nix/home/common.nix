@@ -28,8 +28,6 @@ in
     delta
     lazygit
     lazydocker
-    # Desktop
-    jankyborders # started by aerospace
     # Editors & multiplexer
     neovim
     tmux
@@ -59,7 +57,6 @@ in
   };
 
   xdg.configFile = {
-    "aerospace".source = link "configs/aerospace/.config/aerospace";
     "alacritty".source = link "configs/alacritty/.config/alacritty";
     "nvim".source = link "configs/nvim/.config/nvim";
     "tmux".source = link "configs/tmux/.config/tmux";

@@ -1,0 +1,47 @@
+/* Waybar — Moonfly, flat, no rounding */
+
+* {
+    font-family: "JetBrainsMono Nerd Font", monospace;
+    font-size: 12px;
+    min-height: 0;
+}
+
+window#waybar {
+    background: #080808;
+    color: #bdbdbd;
+    border-bottom: 1px solid #262626;
+}
+
+#workspaces button {
+    padding: 0 8px;
+    color: #949494;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+}
+
+#workspaces button.active {
+    color: #080808;
+    background: #80a0ff;
+}
+
+#workspaces button.urgent {
+    color: #080808;
+    background: #ff5454;
+}
+
+#clock,
+#pulseaudio,
+#network,
+#battery,
+#tray {
+    padding: 0 10px;
+}
+
+#battery.warning {
+    color: #e3c78a;
+}
+
+#battery.critical {
+    color: #ff5454;
+}

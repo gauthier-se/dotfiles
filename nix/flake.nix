@@ -1,5 +1,5 @@
 {
-  description = "Declarative macOS configuration — nix-darwin + home-manager";
+  description = "Declarative macOS (nix-darwin) & NixOS configurations — shared home-manager";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
@@ -39,7 +39,26 @@
             useGlobalPkgs = true;
             useUserPackages = true;
             backupFileExtension = "before-nix";
-            users.${user} = import ./home/home.nix;
+            users.${user} = import ./home/darwin.nix;
+          };
+        }
+      ];
+    };
+
+    # Laptop: nixos-rebuild switch --flake ~/dotfiles/nix#laptop
+    nixosConfigurations."laptop" = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      specialArgs = { inherit inputs user; };
+      modules = [
+        ./nixos/configuration.nix
+
+        home-manager.nixosModules.home-manager
+        {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            backupFileExtension = "before-nix";
+            users.${user} = import ./home/linux.nix;
           };
         }
       ];

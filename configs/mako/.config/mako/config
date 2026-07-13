@@ -1,0 +1,15 @@
+# Mako — Moonfly, flat
+font=JetBrainsMono Nerd Font 11
+background-color=#080808
+text-color=#bdbdbd
+border-color=#626262
+border-size=2
+border-radius=0
+padding=10
+default-timeout=5000
+anchor=top-right
+margin=12
+
+[urgency=critical]
+border-color=#ff5454
+default-timeout=0
