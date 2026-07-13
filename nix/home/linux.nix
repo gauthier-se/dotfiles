@@ -25,8 +25,20 @@ in
     obsidian
   ];
 
+  # The HM module handles the plumbing (systemd session, env vars, portals wiring);
+  # the real config stays a hot-reloadable symlink into the repo via `source =`.
+  wayland.windowManager.hyprland = {
+    enable = true;
+    # hyprland itself comes from the NixOS module (programs.hyprland.enable)
+    package = null;
+    portalPackage = null;
+    configType = "hyprlang"; # classic hyprland.conf syntax, not the new Lua config
+    extraConfig = ''
+      source = ${dotfiles}/configs/hypr/.config/hypr/hyprland.conf
+    '';
+  };
+
   xdg.configFile = {
-    "hypr".source = link "configs/hypr/.config/hypr";
     "waybar".source = link "configs/waybar/.config/waybar";
     "fuzzel".source = link "configs/fuzzel/.config/fuzzel";
     "mako".source = link "configs/mako/.config/mako";

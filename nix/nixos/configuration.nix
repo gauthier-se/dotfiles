@@ -11,6 +11,12 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # Wifi/bluetooth firmware (Intel & co) — without this, often no wifi at all
+  hardware.enableRedistributableFirmware = true;
+
+  # Compressed swap in RAM: no swap partition needed
+  zramSwap.enable = true;
+
   # Must match the attribute name in flake.nix (nixosConfigurations."laptop")
   networking.hostName = "laptop";
   networking.networkmanager.enable = true;
