@@ -12,9 +12,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+    nixos-hardware = {
+      url = "github:NixOS/nixos-hardware/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager, nix-homebrew }:
+  outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager, nix-homebrew, nixos-hardware }:
   let
     user = "segau";
   in {
@@ -51,6 +55,14 @@
       specialArgs = { inherit inputs user; };
       modules = [
         ./nixos/configuration.nix
+
+        # Huawei MateBook 14 2020 AMD (KLVL-WFH9) — no dedicated profile in
+        # nixos-hardware, so the generic Ryzen/Radeon laptop ones:
+        nixos-hardware.nixosModules.common-cpu-amd
+        nixos-hardware.nixosModules.common-cpu-amd-pstate
+        nixos-hardware.nixosModules.common-gpu-amd
+        nixos-hardware.nixosModules.common-pc-laptop
+        nixos-hardware.nixosModules.common-pc-ssd
 
         home-manager.nixosModules.home-manager
         {
