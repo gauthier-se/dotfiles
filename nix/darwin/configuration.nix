@@ -83,6 +83,7 @@
       "protonvpn"
       "bruno"
       "termius"
+      "logi-options+" # Logitech keyboard & mouse (Logi Options+)
       "microsoft-teams"
       "microsoft-word"
       # "microsoft-excel" "microsoft-powerpoint" "microsoft-outlook"
