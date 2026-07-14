@@ -1,0 +1,10 @@
+# Linux laptop: shared config, smaller font (the 1.5 display scale makes 14pt huge)
+
+[general]
+import = ["~/dotfiles/configs/alacritty/.config/alacritty/alacritty.toml"]
+
+[font]
+size = 11
+
+[window]
+decorations = "None" # "Buttonless" is macOS-only

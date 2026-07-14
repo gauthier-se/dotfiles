@@ -56,8 +56,9 @@ in
     ".local/bin/obsidian-vault-setup".source = link "configs/obsidian/vault-setup.sh";
   };
 
+  # alacritty is linked per-OS (darwin.nix / linux.nix): the laptop overrides
+  # the font size for its 1.5 display scale.
   xdg.configFile = {
-    "alacritty".source = link "configs/alacritty/.config/alacritty";
     "nvim".source = link "configs/nvim/.config/nvim";
     "tmux".source = link "configs/tmux/.config/tmux";
     "tmuxinator".source = link "configs/tmux/.config/tmuxinator";

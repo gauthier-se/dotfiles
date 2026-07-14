@@ -55,6 +55,7 @@ in
   };
 
   xdg.configFile = {
+    "alacritty/alacritty.toml".source = link "configs/alacritty/.config/alacritty/linux.toml";
     "waybar".source = link "configs/waybar/.config/waybar";
     "fuzzel".source = link "configs/fuzzel/.config/fuzzel";
     "mako".source = link "configs/mako/.config/mako";

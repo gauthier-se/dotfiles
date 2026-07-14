@@ -13,5 +13,6 @@ in
 
   xdg.configFile = {
     "aerospace".source = link "configs/aerospace/.config/aerospace";
+    "alacritty/alacritty.toml".source = link "configs/alacritty/.config/alacritty/alacritty.toml";
   };
 }
