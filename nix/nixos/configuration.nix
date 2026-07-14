@@ -34,14 +34,17 @@
 
   # --- Desktop: Hyprland, no display server, no desktop environment ---
 
-  programs.hyprland.enable = true; # also wires up xdg portals
+  programs.hyprland = {
+    enable = true; # also wires up xdg portals
+    withUWSM = true; # upstream-recommended session manager (systemd units, env, cleanup)
+  };
   programs.dconf.enable = true; # backend for the dark-mode preference (home-manager dconf.settings)
 
   # Minimal TUI login screen, then straight into Hyprland
   services.greetd = {
     enable = true;
     settings.default_session = {
-      command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
+      command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd 'uwsm start hyprland-uwsm.desktop'";
       user = "greeter";
     };
   };

@@ -28,6 +28,16 @@ in
     proton-vpn
   ];
 
+  # Cursor theme everywhere (Hyprland native + GTK apps) instead of the default
+  home.pointerCursor = {
+    enable = true;
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Modern-Classic";
+    size = 24;
+    gtk.enable = true;
+    hyprcursor.enable = true;
+  };
+
   # System-wide dark mode: modern apps (Electron, GTK4) read it through the
   # settings portal, legacy GTK3 apps through the theme.
   dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
@@ -49,6 +59,8 @@ in
     package = null;
     portalPackage = null;
     configType = "hyprlang"; # classic hyprland.conf syntax, not the new Lua config
+    # uwsm owns the systemd session now; HM's integration would import env twice
+    systemd.enable = false;
     extraConfig = ''
       source = ${dotfiles}/configs/hypr/.config/hypr/hyprland.conf
     '';
