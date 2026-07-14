@@ -22,6 +22,8 @@ in
     brightnessctl
     playerctl
     pamixer
+    # Agent CLI
+    claude-code
     # GUI apps
     brave
     obsidian
