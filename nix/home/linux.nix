@@ -25,7 +25,21 @@ in
     # GUI apps
     brave
     obsidian
+    proton-vpn
   ];
+
+  # System-wide dark mode: modern apps (Electron, GTK4) read it through the
+  # settings portal, legacy GTK3 apps through the theme.
+  dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
+  gtk = {
+    enable = true;
+    theme = {
+      name = "Adwaita-dark";
+      package = pkgs.gnome-themes-extra;
+    };
+    gtk3.extraConfig.gtk-application-prefer-dark-theme = 1;
+    gtk4.theme = null; # GTK4/libadwaita follows color-scheme, no forced theme
+  };
 
   # The HM module handles the plumbing (systemd session, env vars, portals wiring);
   # the real config stays a hot-reloadable symlink into the repo via `source =`.
