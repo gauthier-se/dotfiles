@@ -27,7 +27,7 @@
 
   users.users.${user} = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "video" ];
+    extraGroups = [ "wheel" "networkmanager" "video" "libvirtd" ];
     shell = pkgs.zsh;
   };
   programs.zsh.enable = true;
@@ -73,6 +73,10 @@
   # --- Services ---
 
   services.tailscale.enable = true;
+
+  # KVM/QEMU via libvirt — Vagrant provider (vagrant-libvirt)
+  virtualisation.libvirtd.enable = true;
+  programs.virt-manager.enable = true;
 
   environment.systemPackages = with pkgs; [
     vim
