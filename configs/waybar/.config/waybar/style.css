@@ -1,4 +1,4 @@
-/* Waybar — Moonfly, flat, no rounding */
+/* Waybar — Moonfly, transparent bar with per-module rectangles */
 
 * {
     font-family: "JetBrainsMono Nerd Font", monospace;
@@ -7,35 +7,46 @@
 }
 
 window#waybar {
-    background: #080808;
-    color: #bdbdbd;
-    border-bottom: 1px solid #262626;
-}
-
-#workspaces button {
-    padding: 0 8px;
-    color: #949494;
     background: transparent;
-    border: none;
-    border-radius: 0;
+    color: #bdbdbd;
 }
 
-#workspaces button.active {
-    color: #080808;
-    background: #80a0ff;
-}
-
-#workspaces button.urgent {
-    color: #080808;
-    background: #ff5454;
-}
-
+/* Each populated section is its own rectangle floating on the transparent bar */
+#workspaces,
 #clock,
 #pulseaudio,
 #network,
 #battery,
 #tray {
+    background: #141414;
+    border: 1px solid #262626;
+    border-radius: 4px;
+    margin: 4px 3px;
     padding: 0 10px;
+}
+
+/* Workspaces: the group is the rectangle, buttons sit flush inside it */
+#workspaces {
+    padding: 0 2px;
+}
+
+#workspaces button {
+    padding: 0 6px;
+    color: #949494;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    margin: 3px 0;
+}
+
+#workspaces button.active {
+    color: #80a0ff;
+    background: transparent;
+}
+
+#workspaces button.urgent {
+    color: #ff5454;
+    background: transparent;
 }
 
 #battery.warning {
