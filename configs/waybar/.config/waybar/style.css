@@ -14,15 +14,26 @@ window#waybar {
 /* Each populated section is its own rectangle floating on the transparent bar */
 #workspaces,
 #clock,
-#pulseaudio,
-#network,
-#battery,
+#system,
 #tray {
     background: #141414;
     border: 1px solid #262626;
     border-radius: 4px;
     margin: 4px 3px;
-    padding: 0 10px;
+    padding: 0 4px;
+}
+
+/* Inside the system group: flush modules, no individual rectangle */
+#pulseaudio,
+#cpu,
+#memory,
+#network,
+#battery {
+    padding: 0 6px;
+}
+
+#network {
+    margin-right: 6px;
 }
 
 /* Workspaces: the group is the rectangle, buttons sit flush inside it */

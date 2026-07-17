@@ -20,7 +20,6 @@ in
     ripgrep
     tlrc
     wget
-    yazi
     zoxide
     # Git & TUIs
     git
@@ -50,7 +49,6 @@ in
   home.file = {
     ".zshrc".source = link "configs/zsh/.zshrc";
     ".zsh_aliases".source = link "configs/zsh/.zsh_aliases";
-    ".zsh_functions".source = link "configs/zsh/.zsh_functions";
     ".gitconfig".source = link "configs/git/.gitconfig";
     "moonfly.gitconfig".source = link "configs/git/moonfly.gitconfig";
     ".vimrc".source = link "configs/vim/.vimrc";
@@ -66,6 +64,5 @@ in
     "tmuxinator".source = link "configs/tmux/.config/tmuxinator";
     "lazygit".source = link "configs/lazygit/.config/lazygit";
     "lazydocker".source = link "configs/lazydocker/.config/lazydocker";
-    "yazi".source = link "configs/yazi/.config/yazi";
   };
 }

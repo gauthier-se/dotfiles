@@ -7,14 +7,14 @@ alias ....="cd ../../.."
 alias c="clear"
 
 # Editors & Tools
-alias vi="nvim"
+alias v="nvim"
 alias mux="tmuxinator"
 alias cat="bat -p"
 alias lg="lazygit"
 alias ld="lazydocker"
 
 # Dotfiles
-alias openzs="vi ~/dotfiles/configs/zsh/.zshrc"
+alias openzs="v ~/dotfiles/configs/zsh/.zshrc"
 alias sourcezs="source ~/.zshrc"
 
 # System

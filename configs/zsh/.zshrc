@@ -87,4 +87,3 @@ source ~/.orbstack/shell/init.zsh 2>/dev/null || :
 # ==============================================================================
 
 [ -f ~/.zsh_aliases ] && source ~/.zsh_aliases
-[ -f ~/.zsh_functions ] && source ~/.zsh_functions

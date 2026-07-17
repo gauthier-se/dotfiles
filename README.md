@@ -22,7 +22,6 @@ everywhere.
 | `nvim`      | Neovim config (based on kickstart)           |
 | `tmux`      | Tmux + sessionizer script                    |
 | `git`       | Git configuration (delta, Moonfly theme)     |
-| `yazi`      | Terminal file manager                        |
 | `lazygit`   | Git TUI                                      |
 | `lazydocker`| Docker TUI                                   |
 

@@ -7,7 +7,12 @@
 
     "modules-left": ["hyprland/workspaces"],
     "modules-center": ["clock"],
-    "modules-right": ["pulseaudio", "network", "battery", "tray"],
+    "modules-right": ["group/system", "tray"],
+
+    "group/system": {
+        "orientation": "horizontal",
+        "modules": ["pulseaudio", "cpu", "memory", "network", "battery"]
+    },
 
     "hyprland/workspaces": {
         "format": "{id}: {icon}",
@@ -26,6 +31,16 @@
         "format": "{icon} {volume}%",
         "format-muted": "󰝟",
         "format-icons": { "default": ["󰕿", "󰖀", "󰕾"] }
+    },
+
+    "cpu": {
+        "format": "󰻠 {usage}%",
+        "interval": 2
+    },
+
+    "memory": {
+        "format": "󰍛 {used:0.1f}G/{total:0.1f}G",
+        "interval": 2
     },
 
     "network": {
