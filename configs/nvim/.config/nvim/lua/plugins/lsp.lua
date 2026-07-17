@@ -96,6 +96,8 @@ return {
       local servers = {
         clangd = { bin = 'clangd' },
         gopls = { bin = 'gopls' },
+        basedpyright = { bin = 'basedpyright-langserver' },
+        ruff = { bin = 'ruff' },
         ts_ls = { bin = 'typescript-language-server' },
         tailwindcss = { bin = 'tailwindcss-language-server' },
         cssls = { bin = 'vscode-css-language-server' },

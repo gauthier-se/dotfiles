@@ -38,6 +38,8 @@ in
     nixd # nix files
     # Baseline runtime — projects use their own version via devshells
     nodejs_22
+    # Learning
+    bootdev-cli # boot.dev course runner
   ];
 
   programs.direnv = {

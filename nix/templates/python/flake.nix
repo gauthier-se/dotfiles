@@ -17,6 +17,8 @@
             packages = with pkgs; [
               python312
               uv
+              basedpyright
+              ruff
             ];
 
             shellHook = ''
