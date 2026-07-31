@@ -100,6 +100,15 @@ alt-shift-j = ['join-with down', 'mode main']
 alt-shift-k = ['join-with up', 'mode main']
 alt-shift-l = ['join-with right', 'mode main']
 
+# Workspaces 6–10 go to the second monitor when one is present.
+# With a single monitor, AeroSpace falls back to it automatically.
+[workspace-to-monitor-force-assignment]
+6  = 'secondary'
+7  = 'secondary'
+8  = 'secondary'
+9  = 'secondary'
+10 = 'secondary'
+
 # Auto-assign apps to workspaces on launch
 [[on-window-detected]]
 if.app-id = 'com.brave.Browser'
