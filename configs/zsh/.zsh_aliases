@@ -4,19 +4,16 @@ alias la="ls -A"
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
-alias c="clear"
 
 # Editors & Tools
-alias v="nvim"
 alias mux="tmuxinator"
 alias cat="bat -p"
 alias lg="lazygit"
 alias ld="lazydocker"
 
 # Dotfiles
-alias openzs="v ~/dotfiles/configs/zsh/.zshrc"
+alias openzs="vim ~/dotfiles/configs/zsh/.zshrc"
 alias sourcezs="source ~/.zshrc"
 
 # System
 alias update="sudo darwin-rebuild switch --flake ~/dotfiles/nix"
-alias startdocker="orb"

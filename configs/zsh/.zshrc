@@ -34,9 +34,6 @@ zinit light zsh-users/zsh-autosuggestions
 zinit light Aloxaf/fzf-tab
 zinit light MichaelAquilina/zsh-you-should-use
 
-# Oh My Zsh snippets (aliases git, etc.)
-zinit snippet OMZP::git
-
 # Completions
 autoload -Uz compinit && compinit
 zinit cdreplay -q
