@@ -76,9 +76,26 @@ sudo darwin-rebuild switch --flake ~/dotfiles/nix
 # Laptop: same idea
 sudo nixos-rebuild switch --flake ~/dotfiles/nix#laptop
 
-# Upgrade packages (bump the lockfile, then rebuild)
-nix flake update --flake ~/dotfiles/nix && sudo darwin-rebuild switch --flake ~/dotfiles/nix
+# Upgrade everything (alias: upgrade) — bump the lockfile, rebuild, then Homebrew.
+# Commit the resulting flake.lock: it is what keeps both machines in sync.
+nix flake update --flake ~/dotfiles/nix \
+  && sudo darwin-rebuild switch --flake ~/dotfiles/nix \
+  && brew update && brew upgrade --cask && mas upgrade
+
+# Roll back a bad rebuild (nixos-rebuild takes the same flags)
+darwin-rebuild --list-generations
+sudo darwin-rebuild switch --rollback
+
+# Nix itself — installed by Determinate, not managed by nix-darwin (nix.enable = false)
+sudo determinate-nixd upgrade
+
+# Reclaim disk space, once the new generation has proven itself
+sudo nix-collect-garbage -d && nix-collect-garbage -d && sudo nix store optimise
 ```
+
+`update` and `upgrade` are defined per-OS in `configs/zsh/.zsh_aliases` (the file is
+shared, so it branches on `$OSTYPE`): the laptop variants target `#laptop` and skip
+the Homebrew step.
 
 Configs (`nvim`, `tmux`, `aerospace`…) are symlinked outside the Nix store:
 they stay editable without a rebuild.
@@ -96,5 +113,10 @@ No runtime is installed globally, except a Node LTS for `npx` and agent CLIs.
 
 ## Notes
 
-- `homebrew.onActivation.cleanup` is set to `"none"` during the migration;
-  switch it to `"zap"` after the clean reinstall.
+- `homebrew.onActivation.cleanup = "zap"`: brew only ever holds what the flake
+  declares — anything removed from `casks`/`brews` is uninstalled on the next rebuild.
+- `autoUpdate` and `upgrade` are both off, so a rebuild never changes a cask
+  version: it installs what is missing and leaves the rest alone. Cask upgrades
+  happen only when you ask for them (the `upgrade` alias). Flip both to `true`
+  if you would rather have every rebuild pull the latest — at the cost of slower,
+  non-reproducible rebuilds.

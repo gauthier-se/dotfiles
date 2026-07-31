@@ -15,5 +15,14 @@ alias ld="lazydocker"
 alias openzs="vim ~/dotfiles/configs/zsh/.zshrc"
 alias sourcezs="source ~/.zshrc"
 
-# System
-alias update="sudo darwin-rebuild switch --flake ~/dotfiles/nix"
+# System — this file is shared between the Mac and the NixOS laptop
+if [[ "$OSTYPE" == darwin* ]]; then
+  alias update="sudo darwin-rebuild switch --flake ~/dotfiles/nix"
+  alias upgrade="nix flake update --flake ~/dotfiles/nix \
+    && sudo darwin-rebuild switch --flake ~/dotfiles/nix \
+    && brew update && brew upgrade --cask && mas upgrade"
+else
+  alias update="sudo nixos-rebuild switch --flake ~/dotfiles/nix#laptop"
+  alias upgrade="nix flake update --flake ~/dotfiles/nix \
+    && sudo nixos-rebuild switch --flake ~/dotfiles/nix#laptop"
+fi
