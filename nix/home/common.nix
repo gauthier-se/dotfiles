@@ -27,6 +27,7 @@ in
     delta
     lazygit
     lazydocker
+    devenv
     # Editors & multiplexer
     neovim
     tmux
@@ -38,7 +39,16 @@ in
     # Baseline runtime — projects use their own version via devshells
     nodejs_22
     # Learning
-    bootdev-cli # boot.dev course runner
+    (bootdev-cli.overrideAttrs (_: rec {
+      version = "1.31.1";
+      src = fetchFromGitHub {
+        owner = "bootdotdev";
+        repo = "bootdev";
+        tag = "v${version}";
+        hash = "sha256-0koZYMQxCHPtB44OYhiD9+nYAyHWXbyQd2xhdqnOqEw=";
+      };
+      vendorHash = "sha256-ZDioEU5uPCkd+kC83cLlpgzyOsnpj2S7N+lQgsQb8uY=";
+    }))
   ];
 
   programs.direnv = {

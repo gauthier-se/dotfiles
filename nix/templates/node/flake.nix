@@ -18,6 +18,7 @@
               nodejs_22
               pnpm
               typescript-language-server
+              typescript
               prettierd
               eslint_d
             ];
