@@ -26,6 +26,7 @@ in
     claude-code
     # GUI apps
     brave
+    firefox
     obsidian
     proton-vpn
   ];

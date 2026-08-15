@@ -1,11 +1,13 @@
 # dotfiles
 
-Personal setup for two machines, fully declarative and managed with **Nix**:
+Personal setup for three machines, fully declarative and managed with **Nix**:
 
 - **MacBook Pro** — [nix-darwin](https://github.com/nix-darwin/nix-darwin)
 - **Laptop (NixOS)** — Hyprland + Waybar + Fuzzel, tuigreet login, LUKS full-disk encryption
+- **Dev box (NixOS)** — headless VM in the homelab, reached over SSH from the
+  terminal and from the phone; installed remotely with nixos-anywhere + disko
 
-Both share the same [home-manager](https://github.com/nix-community/home-manager)
+All three share the same [home-manager](https://github.com/nix-community/home-manager)
 config: one command rebuilds the whole system — CLI packages, GUI apps, system
 settings, fonts and dotfiles. Same minimalist philosophy everywhere, Moonfly theme
 everywhere.
@@ -51,16 +53,19 @@ curl -fsSL https://install.determinate.systems/nix | sh -s -- install --determin
 sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake ~/dotfiles/nix
 ```
 
-**NixOS:** boot the minimal ISO and follow the install procedure in
+**NixOS (laptop):** boot the minimal ISO and follow the install procedure in
 [`nix/README.md`](nix/README.md) — partitioning + LUKS, hardware config,
 then `nixos-install --flake ~/dotfiles/nix#laptop`.
+
+**NixOS (dev box):** no ISO — the VM is created by OpenTofu in the homelab repo,
+then installed over SSH with `nixos-anywhere --flake ~/dotfiles/nix#devbox`.
 
 See [`nix/README.md`](nix/README.md) for day-to-day usage and per-project devshells.
 
 ## Layout
 
 ```
-nix/        flake.nix, darwin/ (macOS system), nixos/ (laptop system),
-            home/ (user: common + per-OS), templates/ (devshells)
+nix/        flake.nix, darwin/ (macOS system), nixos/ (laptop + devbox systems),
+            home/ (user: common + per-OS + server), templates/ (devshells)
 configs/    dotfiles, symlinked into $HOME by home-manager (editable without rebuild)
 ```

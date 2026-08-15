@@ -15,14 +15,16 @@ alias ld="lazydocker"
 alias openzs="vim ~/dotfiles/configs/zsh/.zshrc"
 alias sourcezs="source ~/.zshrc"
 
-# System — this file is shared between the Mac and the NixOS laptop
+# System — this file is shared between the Mac and every NixOS machine.
+# On NixOS the flake attribute is the hostname (laptop, devbox…), so $HOST picks
+# the right one instead of hardcoding a machine that is not the one being typed on.
 if [[ "$OSTYPE" == darwin* ]]; then
   alias update="sudo darwin-rebuild switch --flake ~/dotfiles/nix"
   alias upgrade="nix flake update --flake ~/dotfiles/nix \
     && sudo darwin-rebuild switch --flake ~/dotfiles/nix \
     && brew update && brew upgrade --cask && mas upgrade"
 else
-  alias update="sudo nixos-rebuild switch --flake ~/dotfiles/nix#laptop"
+  alias update="sudo nixos-rebuild switch --flake ~/dotfiles/nix#$HOST"
   alias upgrade="nix flake update --flake ~/dotfiles/nix \
-    && sudo nixos-rebuild switch --flake ~/dotfiles/nix#laptop"
+    && sudo nixos-rebuild switch --flake ~/dotfiles/nix#$HOST"
 fi

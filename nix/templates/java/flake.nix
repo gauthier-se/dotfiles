@@ -15,8 +15,8 @@
         {
           default = pkgs.mkShell {
             packages = with pkgs; [
-              jdk21
-              maven
+              jdk25
+              (maven.override { jdk_headless = jdk25; })
             ];
           };
         });

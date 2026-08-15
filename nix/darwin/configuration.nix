@@ -73,6 +73,7 @@
       "raycast"
       # Apps
       "brave-browser"
+      "firefox"
       "obsidian"
       "orbstack"
       "discord"
