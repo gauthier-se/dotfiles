@@ -1,7 +1,7 @@
 # ~/.config/tmuxinator/checkpoint.yml
 
 name: checkpoint
-root: ~/Repos/Java/Checkpoint
+root: ~/repos/Java/Checkpoint
 
 windows:
   - nvim:

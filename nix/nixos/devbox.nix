@@ -1,15 +1,11 @@
 { config, pkgs, user, ... }:
 
-# Homelab dev box — Proxmox VM 220 on the Servers VLAN (10.10.20.20), declared
-# in the homelab repo (`opentofu/locals.tf`) and installed with nixos-anywhere.
-# Headless on purpose: it is reached over SSH from the Mac's terminal and from
-# Termius on the phone, and it runs the same shell, editor and tooling as the
-# two desktop machines because it imports the same home-manager config.
+# Homelab dev box — Proxmox VM 220 on the Servers VLAN, provisioned by OpenTofu
+# in the homelab repo and installed with nixos-anywhere. Headless: reached over
+# SSH from the terminal and from Termius on the phone.
 let
-  # The only credential that opens this machine: password authentication is off
-  # everywhere below, and no account has a password to begin with. Add the
-  # phone's key here (Termius → Keychain → generate, then paste the public half)
-  # and rebuild; there is no other way in, by design.
+  # Add the phone's Termius key here — no account has a password, so this list
+  # is the only way in.
   authorizedKeys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILuL65N5OYZw+yJcghWu7aIsocUjcNuYbedgDsUZu3eI gauthier"
   ];
@@ -20,36 +16,21 @@ in
 
   system.stateVersion = "25.05";
 
-  # --- Boot & virtual hardware ---
-  #
-  # No hardware-configuration.nix: disko declares the filesystems, and a guest
-  # has no hardware to detect beyond the virtio devices Proxmox gives it.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.initrd.availableKernelModules = [ "virtio_pci" "virtio_blk" "virtio_scsi" "ahci" "sd_mod" "sr_mod" ];
 
-  # Lets the hypervisor report the guest's address and shut it down cleanly
-  # instead of pulling the power (Proxmox waits on this agent).
   services.qemuGuest.enable = true;
-
-  # Compressed swap in RAM: a Nix build that overshoots the VM's memory slows
-  # down instead of being killed, and the guest needs no swap disk for it.
   zramSwap.enable = true;
 
   time.timeZone = "Europe/Paris";
   i18n.defaultLocale = "en_US.UTF-8";
-  console.keyMap = "fr"; # only ever seen through the Proxmox console
+  console.keyMap = "fr";
 
-  # --- Network ---
-  #
-  # Static, and declared here rather than taken from cloud-init: NixOS never
-  # reads the cloud-init drive Proxmox attaches, so the address in the OpenTofu
-  # catalogue and the one below have to say the same thing (10.10.20.20/24,
-  # docs/network/addressing.md in the homelab repo).
-  #
-  # Matched on `en*` instead of a fixed name because the interface a guest gets
-  # depends on the emulated bus (ens18, enp0s18…): pinning the wrong one leaves
-  # the machine unreachable with no console error.
+  # NixOS never reads the cloud-init drive Proxmox attaches, so this address has
+  # to stay in step with the OpenTofu catalogue. Matched on `en*` because the
+  # interface name depends on the emulated bus — pinning `ens18` is what leaves
+  # the machine unreachable with nothing in the logs.
   networking.hostName = "devbox";
   networking.useDHCP = false;
   networking.useNetworkd = true;
@@ -65,35 +46,25 @@ in
   networking.firewall = {
     enable = true;
     allowedTCPPorts = [ 22 ];
-    # Tailscale's own port, and its interface treated as trusted — the tailnet
-    # is how the phone reaches this box from outside the house.
     allowedUDPPorts = [ config.services.tailscale.port ];
     trustedInterfaces = [ "tailscale0" ];
-    # Strict reverse-path filtering drops the tailnet's own return traffic.
-    checkReversePath = "loose";
+    checkReversePath = "loose"; # strict filtering drops the tailnet's return traffic
   };
 
-  # `tailscale up` once, by hand, after the install: the box then answers on its
-  # tailnet name from anywhere, without depending on the OPNsense subnet router
-  # staying up. The Servers VLAN is advertised there too, so this is a second
-  # path to the same machine rather than the only one.
   services.tailscale.enable = true;
-
-  # --- Access ---
 
   services.openssh = {
     enable = true;
     settings = {
       PasswordAuthentication = false;
       KbdInteractiveAuthentication = false;
-      # Keeps `nixos-anywhere` and `nixos-rebuild --target-host root@devbox`
-      # working; with password auth off it means "key only", never a password.
+      # nixos-anywhere and `nixos-rebuild --target-host` both need root; with
+      # password auth off this means "key only".
       PermitRootLogin = "prohibit-password";
     };
   };
 
   users.mutableUsers = false;
-
   users.users.root.openssh.authorizedKeys.keys = authorizedKeys;
 
   users.users.${user} = {
@@ -105,14 +76,9 @@ in
 
   programs.zsh.enable = true;
 
-  # No account here has a password, so sudo cannot ask for one — it would lock
-  # the only user out of `wheel` on a machine whose sole credential is a key.
+  # There is no password to type, so sudo must not ask for one.
   security.sudo.wheelNeedsPassword = false;
 
-  # --- Dev environment ---
-
-  # `lazydocker` comes with the shared home config, and a dev box is where
-  # containers get built and thrown away.
   virtualisation.docker = {
     enable = true;
     autoPrune = {
@@ -121,11 +87,8 @@ in
     };
   };
 
-  # home-manager points nvim/tmux/zsh at ~/dotfiles through out-of-store
-  # symlinks, so they stay editable without a rebuild — which means every one of
-  # them dangles until that repo exists. On a machine installed from scratch it
-  # does not, so clone it once, before the first login rather than after the
-  # first confused one. Switch the remote to SSH after `gh auth login` to push.
+  # home-manager symlinks nvim/tmux/zsh *into* ~/dotfiles, so every one of those
+  # links dangles until the repo exists.
   systemd.services.dotfiles-clone = {
     description = "Clone the dotfiles repo the home-manager symlinks point into";
     wantedBy = [ "multi-user.target" ];
@@ -139,14 +102,29 @@ in
     };
   };
 
-  # Building the system on the box itself (`nixos-rebuild` over SSH, or
-  # nixos-anywhere's `--build-on remote`) needs the user to be trusted by the
-  # daemon — a Mac on aarch64 cannot produce these x86_64 closures anyway.
-  nix.settings.trusted-users = [ "root" user ];
+  # Without tpm the shared tmux.conf still loads, it just silently lacks its plugins.
+  systemd.services.tmux-tpm-clone = {
+    description = "Clone tmux's plugin manager, which the shared tmux.conf runs";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "network-online.target" "dotfiles-clone.service" ];
+    wants = [ "network-online.target" ];
+    unitConfig.ConditionPathExists = "!/home/${user}/.tmux/plugins/tpm";
+    serviceConfig = {
+      Type = "oneshot";
+      User = user;
+      ExecStart = "${pkgs.git}/bin/git clone https://github.com/tmux-plugins/tpm /home/${user}/.tmux/plugins/tpm";
+      # Best effort: `prefix + I` does the same, so a failure must not fail the unit.
+      ExecStartPost = "-${pkgs.writeShellScript "tpm-install-plugins" ''
+        export PATH=${pkgs.tmux}/bin:${pkgs.git}/bin:$PATH
+        tmux -f /home/${user}/.config/tmux/tmux.conf new-session -d -s tpm-install
+        /home/${user}/.tmux/plugins/tpm/scripts/install_plugins.sh
+        tmux kill-session -t tpm-install
+      ''}";
+    };
+  };
 
-  # Every rebuild keeps the generation it replaced. Left alone on a 64 GB disk
-  # that fills up quietly; the collection window is long enough to still roll
-  # back to a build from last week.
+  nix.settings.trusted-users = [ "root" user ]; # the box builds its own closures
+
   nix.gc = {
     automatic = true;
     dates = "weekly";

@@ -36,9 +36,7 @@ in
     lua-language-server # nvim config
     stylua
     nixd # nix files
-    # Baseline runtime — projects use their own version via devshells.
-    # Node's *active* LTS: 22 is in maintenance until April 2027, and 26 only
-    # becomes an LTS at the end of October 2026.
+    # Baseline runtime — projects use their own version via devshells
     nodejs_24
     # Learning
     (bootdev-cli.overrideAttrs (_: rec {
@@ -50,9 +48,8 @@ in
         hash = "sha256-0koZYMQxCHPtB44OYhiD9+nYAyHWXbyQd2xhdqnOqEw=";
       };
       vendorHash = "sha256-ZDioEU5uPCkd+kC83cLlpgzyOsnpj2S7N+lQgsQb8uY=";
-      # This one test shells out to /bin/sleep, which exists inside the darwin
-      # build sandbox and not inside the Linux one — so the package builds on the
-      # Mac and fails on every NixOS machine. Skipping it keeps the other suites.
+      # That test shells out to /bin/sleep: present in the darwin build sandbox,
+      # absent from the Linux one, so the package fails to build on NixOS.
       checkFlags = [ "-skip" "^TestGetLatestVersionHasOverallTimeout$" ];
     }))
   ];

@@ -16,8 +16,6 @@
       url = "github:NixOS/nixos-hardware/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Declarative partitioning — used by the headless homelab box, which is
-    # installed remotely with nixos-anywhere and never sees a manual `fdisk`.
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -82,20 +80,14 @@
       ];
     };
 
-    # Homelab dev box: a headless NixOS VM on Proxmox (guest 220, 10.10.20.20),
-    # provisioned by OpenTofu in the homelab repo and installed remotely:
-    #   nix run github:nix-community/nixos-anywhere -- \
-    #     --flake ~/dotfiles/nix#devbox --build-on remote root@10.10.20.20
-    # Afterwards it rebuilds itself: `update` over SSH (see nix/README.md).
+    # Dev box: nix run github:nix-community/nixos-anywhere -- \
+    #   --flake ~/dotfiles/nix#devbox --build-on remote root@10.10.20.20
     nixosConfigurations."devbox" = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { inherit inputs user; };
       modules = [
         ./nixos/devbox.nix
 
-        # No nixos-hardware profile and no hardware-configuration.nix: the
-        # "hardware" is whatever the hypervisor emulates, and disko declares the
-        # filesystems that file would otherwise hold.
         disko.nixosModules.disko
         ./nixos/devbox-disko.nix
 
