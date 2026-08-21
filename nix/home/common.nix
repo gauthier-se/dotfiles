@@ -27,6 +27,7 @@ in
     delta
     lazygit
     lazydocker
+    glow
     devenv
     # Editors & multiplexer
     neovim
