@@ -10,6 +10,7 @@ in
 
   home.packages = with pkgs; [
     # Everyday CLI
+    atuin # shell history: ctrl-r search, sqlite-backed
     bat
     btop
     fastfetch
@@ -17,10 +18,14 @@ in
     fzf
     httpie
     jq
+    navi # interactive cheatsheets, ctrl-g
     ripgrep
     tlrc
     wget
     zoxide
+    # Dashboard & fun
+    wtfutil # terminal dashboard
+    smassh # typing practice
     # Git & TUIs
     git
     gh
@@ -37,8 +42,10 @@ in
     lua-language-server # nvim config
     stylua
     nixd # nix files
-    # Baseline runtime — projects use their own version via devshells
+    # Baseline runtime: projects use their own version via devshells
     nodejs_24
+    # Agent CLI (unfree: the system configs set nixpkgs.config.allowUnfree)
+    antigravity-cli
     # Learning
     (bootdev-cli.overrideAttrs (_: rec {
       version = "1.31.1";
@@ -68,6 +75,9 @@ in
     ".vimrc".source = link "configs/vim/.vimrc";
     ".local/bin/tmux-sessionizer.sh".source = link "configs/tmux/.local/bin/tmux-sessionizer.sh";
     ".local/bin/obsidian-vault-setup".source = link "configs/obsidian/vault-setup.sh";
+    # wtf: the launcher resolves @HOME@ in the config before starting wtfutil,
+    # which expands neither "~" nor "$HOME" in module paths. Alias: dash.
+    ".local/bin/wtf-dashboard".source = link "configs/wtf/bin/dashboard.sh";
   };
 
   # alacritty is linked per-OS (darwin.nix / linux.nix): the laptop overrides
@@ -78,5 +88,10 @@ in
     "tmuxinator".source = link "configs/tmux/.config/tmuxinator";
     "lazygit".source = link "configs/lazygit/.config/lazygit";
     "lazydocker".source = link "configs/lazydocker/.config/lazydocker";
+    "atuin/config.toml".source = link "configs/atuin/.config/atuin/config.toml";
+    "navi".source = link "configs/navi/.config/navi";
+    # No wtf entry on purpose: ~/.config/wtf/ is where wtfutil writes the todo
+    # list, so it stays a real directory owned by the machine. The dashboard
+    # config is read from the repo by ~/.local/bin/wtf-dashboard instead.
   };
 }

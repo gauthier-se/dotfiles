@@ -1,0 +1,33 @@
+% tmux, tmuxinator
+
+# Attach to a running session
+tmux attach -t <session>
+
+$ session: tmux list-sessions -F '#{session_name}' 2>/dev/null
+
+# Kill a session
+tmux kill-session -t <session>
+
+$ session: tmux list-sessions -F '#{session_name}' 2>/dev/null
+
+# Kill every session but the current one
+tmux kill-session -a
+
+# Start a tmuxinator project
+tmuxinator start <project>
+
+$ project: tmuxinator list -n | tail -n +2
+
+# Edit a tmuxinator project
+tmuxinator open <project>
+
+$ project: tmuxinator list -n | tail -n +2
+
+# Create a new tmuxinator project
+tmuxinator new <name>
+
+# Reload the tmux config
+tmux source-file ~/.config/tmux/tmux.conf
+
+# Jump to a project directory in a session (the sessionizer, prefix+f)
+~/.local/bin/tmux-sessionizer.sh

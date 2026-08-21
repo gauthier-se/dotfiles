@@ -1,10 +1,10 @@
 { config, pkgs, user, ... }:
 
-# Homelab dev box — Proxmox VM 220 on the Servers VLAN, provisioned by OpenTofu
+# Homelab dev box: Proxmox VM 220 on the Servers VLAN, provisioned by OpenTofu
 # in the homelab repo and installed with nixos-anywhere. Headless: reached over
 # SSH from the terminal and from Termius on the phone.
 let
-  # Add the phone's Termius key here — no account has a password, so this list
+  # Add the phone's Termius key here: no account has a password, so this list
   # is the only way in.
   authorizedKeys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILuL65N5OYZw+yJcghWu7aIsocUjcNuYbedgDsUZu3eI gauthier"
@@ -29,7 +29,7 @@ in
 
   # NixOS never reads the cloud-init drive Proxmox attaches, so this address has
   # to stay in step with the OpenTofu catalogue. Matched on `en*` because the
-  # interface name depends on the emulated bus — pinning `ens18` is what leaves
+  # interface name depends on the emulated bus, so pinning `ens18` is what leaves
   # the machine unreachable with nothing in the logs.
   networking.hostName = "devbox";
   networking.useDHCP = false;

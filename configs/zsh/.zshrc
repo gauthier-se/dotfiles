@@ -12,6 +12,11 @@ export BAT_THEME="base16"
 # Base PATHs
 export PATH="$HOME/.local/bin:$PATH"
 
+# navi looks its cheatsheets up here. The config file cannot hold the path: it
+# does not expand "~", and the repo sits under a different $HOME on macOS and on
+# NixOS.
+export NAVI_PATH="$HOME/dotfiles/configs/navi/cheats"
+
 # ==============================================================================
 # 2. Zinit & Plugins
 # ==============================================================================
@@ -69,12 +74,19 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
 # ==============================================================================
-# 5. Integrations (fzf, zoxide, direnv)
+# 5. Integrations (fzf, zoxide, direnv, atuin, navi)
 # ==============================================================================
 
 eval "$(fzf --zsh)"
 eval "$(zoxide init zsh)"
 command -v direnv >/dev/null && eval "$(direnv hook zsh)"
+
+# atuin owns ctrl-r. --disable-up-arrow leaves the arrow keys, and the ^p/^n
+# bindings above, on zsh's own prefix history search.
+eval "$(atuin init zsh --disable-up-arrow)"
+
+# navi on ctrl-g: browse the cheatsheets and drop the command on the prompt
+eval "$(navi widget zsh)"
 
 # OrbStack
 source ~/.orbstack/shell/init.zsh 2>/dev/null || :

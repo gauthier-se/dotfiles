@@ -11,7 +11,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # Wifi/bluetooth firmware (Intel & co) — without this, often no wifi at all
+  # Wifi/bluetooth firmware (Intel & co): without this, often no wifi at all
   hardware.enableRedistributableFirmware = true;
 
   # Compressed swap in RAM: no swap partition needed
@@ -74,7 +74,7 @@
 
   services.tailscale.enable = true;
 
-  # KVM/QEMU via libvirt — Vagrant provider (vagrant-libvirt)
+  # KVM/QEMU via libvirt, the Vagrant provider (vagrant-libvirt)
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
 

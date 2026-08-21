@@ -1,0 +1,67 @@
+# atuin: shell history in SQLite, searchable with ctrl-r.
+#
+# Local only: no account, no server, nothing leaves the machine. The three
+# machines each keep their own history, which is the point: the dev box's
+# history is the dev box's. To share it later, either `atuin register` against
+# the public server or self-host `services.atuin` on the dev box and set
+# sync_address here.
+auto_sync = false
+update_check = false # the version is pinned by the flake, not by atuin
+
+# Dates as dd/mm, not mm/dd
+dialect = "uk"
+
+## Search -------------------------------------------------------------------
+
+search_mode = "fuzzy"
+filter_mode = "global"
+
+# Make "workspace" filtering available: inside a git repo, ctrl-r can narrow to
+# the commands run anywhere in that repo's tree. Cycle filters with ctrl-r.
+workspaces = true
+
+# Enter puts the command on the prompt instead of running it straight away.
+# One keystroke more, and no surprise `rm -rf` from a fat-fingered search.
+enter_accept = false
+
+# Esc gives the line back untouched rather than replacing it with the query
+exit_mode = "return-original"
+
+## Interface ----------------------------------------------------------------
+
+style = "compact"
+inline_height = 25
+show_preview = true
+show_help = true
+keymap_mode = "emacs" # matches `bindkey -e` in .zshrc
+
+[ui]
+columns = ["duration", "time", "command"]
+syntax_highlight = true
+
+## Privacy ------------------------------------------------------------------
+
+# Built-in regexes for AWS keys, GitHub PATs, Slack tokens, Stripe keys…
+secrets_filter = true
+
+# Unanchored regexes: anything matching never reaches the database.
+history_filter = [
+  "^ ",                     # a leading space keeps a command out, as in zsh
+  "(?i)(token|passwd|password|secret|api[_-]?key)=",
+  "^atuin (login|register|key)",
+]
+
+# Never record anything typed inside the password store or SSH key material
+cwd_filter = [
+  "/\\.ssh",
+  "/\\.gnupg",
+]
+
+[stats]
+# Count the subcommand, so `git push` and `git commit` are separate entries
+common_subcommands = [
+  "cargo", "docker", "git", "go", "kubectl", "nix", "nixos-rebuild",
+  "darwin-rebuild", "npm", "pnpm", "systemctl", "tmux", "tofu",
+]
+common_prefix = ["sudo"]
+ignored_commands = ["cd", "ls", "ll", "la", "z"]

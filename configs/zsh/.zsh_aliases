@@ -10,6 +10,8 @@ alias mux="tmuxinator"
 alias cat="bat -p"
 alias lg="lazygit"
 alias ld="lazydocker"
+alias dash="wtf-dashboard" # wtfutil, see configs/wtf/
+alias typing="smassh"      # typing practice ("type" is a shell builtin)
 
 # Dotfiles
 alias openzs="vim ~/dotfiles/configs/zsh/.zshrc"

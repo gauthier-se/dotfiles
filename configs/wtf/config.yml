@@ -1,0 +1,184 @@
+# wtfutil: terminal dashboard (alias: dash)
+#
+# @HOME@ is substituted with $HOME by bin/dashboard.sh before wtf reads this.
+# wtfutil 0.50.0 expands neither "~" nor "$HOME" in module paths, and $HOME is
+# not the same string on macOS and on NixOS. Edit this file, not the resolved
+# copy in ~/.cache/wtf/.
+#
+# Layout is 4 columns × 4 rows. No `grid:` block on purpose: without it wtf
+# splits the terminal evenly, so the same config works on the Mac, on the laptop
+# and over SSH on the dev box instead of assuming a fixed character width.
+#
+# Keys: Tab / Shift-Tab cycle focusable widgets, /
+# shows the help, Esc unfocuses, Ctrl-R refreshes everything, q quits.
+
+wtf:
+  refreshInterval: 1s
+  openFileUtil: "open" # macOS; set to xdg-open if you use this on NixOS
+  colors:
+    background: "#080808"
+    border:
+      focusable: "#949494"
+      focused: "#80a0ff"
+      normal: "#323437"
+    checked: "#949494"
+    text: "#bdbdbd"
+    title: "#79dac8"
+    highlight:
+      fore: "#080808"
+      back: "#80a0ff"
+    rows:
+      even: "#bdbdbd"
+      odd: "#c6c6c6"
+
+  mods:
+    # ---------------------------------------------------------------- column 0
+    batteries:
+      type: cmdrunner
+      title: " Batteries "
+      cmd: "@HOME@/dotfiles/configs/wtf/bin/device-batteries.sh"
+      args: []
+      enabled: true
+      position: { top: 0, left: 0, height: 1, width: 1 }
+      refreshInterval: 5m
+
+    todo:
+      type: todo
+      title: " Todo "
+      # Always resolved relative to ~/.config/wtf/, whatever --config points at,
+      # and written to by the widget: the list stays on the machine, out of git.
+      filename: "todo.yml"
+      checkedIcon: "x"
+      enabled: true
+      newPos: "last"
+      checkedPos: "last"
+      colors:
+        checked: "#949494"
+        highlight: { fore: "#080808", back: "#80a0ff" }
+      position: { top: 1, left: 0, height: 3, width: 1 }
+      refreshInterval: 1h
+
+    # ---------------------------------------------------------------- column 1
+    resources:
+      type: resourceusage
+      title: " CPU / RAM "
+      enabled: true
+      position: { top: 0, left: 1, height: 1, width: 1 }
+      refreshInterval: 3s
+
+    disks:
+      type: cmdrunner
+      title: " Disks "
+      cmd: "@HOME@/dotfiles/configs/wtf/bin/disk-usage.sh"
+      args: []
+      enabled: true
+      position: { top: 1, left: 1, height: 1, width: 1 }
+      refreshInterval: 10m
+
+    docker:
+      type: docker
+      title: " Docker "
+      # Talks to the local daemon over $DOCKER_HOST: OrbStack on the Mac, the
+      # system daemon on the dev box. Shows nothing when no daemon is running.
+      labelColor: "#79dac8"
+      enabled: true
+      position: { top: 2, left: 1, height: 2, width: 1 }
+      refreshInterval: 30s
+
+    # ---------------------------------------------------------------- column 2
+    git:
+      type: git
+      title: " Git "
+      repositories:
+        # A path ending in "/" is walked recursively for git repos, so every
+        # project under ~/repos shows up. Left/right arrows cycle through them.
+        - "@HOME@/dotfiles"
+        - "@HOME@/repos/"
+      commitCount: 5
+      commitFormat: "[#8cc85f]%h [#bdbdbd]%s [#949494]%an, %cd[-]"
+      dateFormat: "%d %b %H:%M"
+      branchInTitle: true
+      lastFolderTitle: true
+      showModuleName: false
+      showFilesIfEmpty: false
+      enabled: true
+      position: { top: 0, left: 2, height: 2, width: 1 }
+      refreshInterval: 30s
+
+    homelab_ping:
+      type: ping
+      title: " Homelab "
+      hosts:
+        - label: "devbox"
+          hostname: "10.10.20.20"
+        - label: "gateway"
+          hostname: "10.10.20.1"
+        - label: "internet"
+          hostname: "1.1.1.1"
+      enabled: true
+      position: { top: 2, left: 2, height: 1, width: 1 }
+      refreshInterval: 1m
+
+    services:
+      type: urlcheck
+      title: " Services "
+      timeout: 10
+      # Placeholders, swap in the real homelab endpoints. Anything that answers
+      # an HTTP request works; the widget only reports the status code.
+      urls:
+        - "https://github.com"
+        # - "http://10.10.20.20:8080"
+        # - "https://<service>.<your-tailnet>.ts.net"
+      enabled: true
+      position: { top: 3, left: 2, height: 1, width: 1 }
+      refreshInterval: 5m
+
+    # ---------------------------------------------------------------- column 3
+    clocks:
+      type: clocks
+      title: " Clocks "
+      enabled: true
+      locations:
+        Paris: "Europe/Paris"
+        UTC: "Etc/UTC"
+        New_York: "America/New_York"
+        Tokyo: "Asia/Tokyo"
+      sort: "chronological"
+      dateFormat: "Mon 2 Jan"
+      timeFormat: "15:04"
+      position: { top: 0, left: 3, height: 1, width: 1 }
+      refreshInterval: 15s
+
+    weather:
+      type: prettyweather
+      title: " Weather "
+      # wttr.in, so no API key, unlike the `weather` module which wants an
+      # OpenWeatherMap one.
+      city: "Paris"
+      unit: "m" # metric
+      language: "fr"
+      view: "0" # compact: current conditions only
+      enabled: true
+      position: { top: 1, left: 3, height: 1, width: 1 }
+      refreshInterval: 30m
+
+    hackernews:
+      type: hackernews
+      title: " HN "
+      numberOfStories: 10
+      storyType: "top"
+      enabled: true
+      position: { top: 2, left: 3, height: 1, width: 1 }
+      refreshInterval: 30m
+
+    feeds:
+      type: feedreader
+      title: " Feeds "
+      feeds:
+        - "https://lobste.rs/rss"
+        - "https://go.dev/blog/feed.atom"
+        - "https://discourse.nixos.org/latest.rss"
+      feedLimit: 5
+      enabled: true
+      position: { top: 3, left: 3, height: 1, width: 1 }
+      refreshInterval: 1h

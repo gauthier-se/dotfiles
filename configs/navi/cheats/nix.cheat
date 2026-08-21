@@ -1,0 +1,50 @@
+% nix, dotfiles
+
+# Apply the config of this machine (Mac or NixOS, picks the right command)
+[[ "$OSTYPE" == darwin* ]] && sudo darwin-rebuild switch --flake ~/dotfiles/nix || sudo nixos-rebuild switch --flake ~/dotfiles/nix#$HOST
+
+# Rebuild without applying, to see whether it even evaluates
+[[ "$OSTYPE" == darwin* ]] && darwin-rebuild build --flake ~/dotfiles/nix || nixos-rebuild build --flake ~/dotfiles/nix#$HOST
+
+# Bump the lockfile of every flake input
+nix flake update --flake ~/dotfiles/nix
+
+# Bump a single flake input
+nix flake update <input> --flake ~/dotfiles/nix
+
+$ input: nix flake metadata ~/dotfiles/nix --json | jq -r '.locks.nodes.root.inputs | keys[]'
+
+# Rebuild the dev box from the Mac (evaluates here, builds there)
+nixos-rebuild switch --flake ~/dotfiles/nix#devbox --target-host root@10.10.20.20 --build-host root@10.10.20.20
+
+# Reinstall the dev box from scratch over SSH
+nix run github:nix-community/nixos-anywhere -- --flake ~/dotfiles/nix#devbox --build-on remote root@10.10.20.20
+
+# List the generations of this machine
+[[ "$OSTYPE" == darwin* ]] && darwin-rebuild --list-generations || nixos-rebuild list-generations
+
+# Roll back the last rebuild
+[[ "$OSTYPE" == darwin* ]] && sudo darwin-rebuild switch --rollback || sudo nixos-rebuild switch --rollback
+
+# Reclaim disk space (only once the current generation has proven itself)
+sudo nix-collect-garbage -d && nix-collect-garbage -d && sudo nix store optimise
+
+# Search a package in nixpkgs
+nix search nixpkgs <query>
+
+# Show the version a package resolves to in the pinned nixpkgs
+nix eval --raw --impure --expr 'with import (builtins.getFlake "'"$HOME"'/dotfiles/nix").inputs.nixpkgs { system = builtins.currentSystem; config.allowUnfree = true; }; <package>.version'
+
+# Run a package once without installing it
+nix run nixpkgs#<package>
+
+# Drop into a shell with a package available
+nix shell nixpkgs#<package>
+
+# Start a per-project devshell from a template
+nix flake init -t ~/dotfiles/nix#<template> && direnv allow
+
+$ template: echo 'python\nnode\ngo\njava'
+
+# Upgrade Nix itself (Determinate installer, Mac)
+sudo determinate-nixd upgrade

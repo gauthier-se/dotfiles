@@ -1,0 +1,70 @@
+% git
+
+# Check out an existing branch
+git checkout <branch>
+
+$ branch: git branch --format='%(refname:short)'
+
+# Check out a remote branch that has no local copy yet
+git checkout -t <remote_branch>
+
+$ remote_branch: git branch -r --format='%(refname:short)' | grep -v HEAD
+
+# Create a branch and switch to it
+git switch -c <new_branch>
+
+# Undo the last commit, keeping the changes staged
+git reset --soft HEAD~1
+
+# Drop every uncommitted change in a file
+git restore <changed_file>
+
+$ changed_file: git diff --name-only
+
+# Unstage a file
+git restore --staged <staged_file>
+
+$ staged_file: git diff --cached --name-only
+
+# Amend the last commit without editing its message
+git commit --amend --no-edit
+
+# Rebase the current branch onto another one
+git rebase <onto_branch>
+
+$ onto_branch: git branch --format='%(refname:short)'
+
+# Interactively rebase the last N commits
+git rebase -i HEAD~<count>
+
+# Show what changed in a commit
+git show <commit>
+
+$ commit: git log --oneline -n 50 --- --column 1
+
+# Find which commit introduced a string
+git log -S '<string>' --oneline
+
+# Blame a file, ignoring pure-whitespace commits
+git blame -w <file>
+
+$ file: git ls-files
+
+# Stash including untracked files, with a message
+git stash push -u -m '<message>'
+
+# Apply a stash back and drop it
+git stash pop <stash>
+
+$ stash: git stash list --- --column 1 --delimiter ':'
+
+# Clean up local branches whose remote is gone
+git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs -r git branch -D
+
+# Cherry-pick a commit from another branch
+git cherry-pick <pick_commit>
+
+$ pick_commit: git log --oneline --all -n 100 --- --column 1
+
+# Show the diff of what is about to be pushed
+git diff @{upstream}..HEAD

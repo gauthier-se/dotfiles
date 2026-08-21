@@ -10,7 +10,7 @@ in
   home.packages = with pkgs; [
     # Terminal (a Homebrew cask on darwin, a package here)
     alacritty
-    # Desktop (Hyprland session — started by exec-once in hyprland.conf)
+    # Desktop (Hyprland session, started by exec-once in hyprland.conf)
     waybar
     fuzzel
     mako # notifications

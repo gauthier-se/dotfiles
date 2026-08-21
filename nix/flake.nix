@@ -1,5 +1,5 @@
 {
-  description = "Declarative macOS (nix-darwin) & NixOS configurations — shared home-manager";
+  description = "Declarative macOS (nix-darwin) & NixOS configurations, with a shared home-manager";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
@@ -60,7 +60,7 @@
       modules = [
         ./nixos/configuration.nix
 
-        # Huawei MateBook 14 2020 AMD (KLVL-WFH9) — no dedicated profile in
+        # Huawei MateBook 14 2020 AMD (KLVL-WFH9): no dedicated profile in
         # nixos-hardware, so the generic Ryzen/Radeon laptop ones:
         nixos-hardware.nixosModules.common-cpu-amd
         nixos-hardware.nixosModules.common-cpu-amd-pstate

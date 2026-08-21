@@ -1,0 +1,24 @@
+# navi: interactive cheatsheets (ctrl-g in zsh)
+#
+# The cheatsheets themselves live in configs/navi/cheats/ and are found through
+# $NAVI_PATH, exported in .zshrc: paths in this file are not ~-expanded, and the
+# repo path differs between the Mac and the NixOS boxes.
+
+style:
+  tag:
+    color: cyan
+    width_percentage: 20
+    min_width: 16
+  comment:
+    color: blue
+    width_percentage: 45
+    min_width: 45
+  snippet:
+    color: white
+
+finder:
+  command: fzf
+  overrides: --height 60% --layout reverse --border
+
+shell:
+  command: zsh
