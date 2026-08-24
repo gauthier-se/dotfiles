@@ -1,6 +1,11 @@
 [user]
-name = gauthierseyzeriat
-email = gseyzeriat1@gmail.com
+# The GitHub account's own identity, so a commit made here and a commit made by
+# GitHub (a squash merge, a web edit) are the same author. The noreply alias is
+# what the account publishes while "keep my email addresses private" is on, and
+# it is what links a commit to the profile: a personal address that is not among
+# the account's verified emails is attributed to nobody at all.
+name = gauthier-se
+email = 139963620+gauthier-se@users.noreply.github.com
 
 [core]
 editor = nvim
