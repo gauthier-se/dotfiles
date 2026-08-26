@@ -28,9 +28,8 @@ everywhere.
 | `lazydocker`| Docker TUI                                   |
 | `atuin`     | Shell history in SQLite, `ctrl-r` search (local only, no sync) |
 | `navi`      | Interactive cheatsheets on `ctrl-g`, the cheats live in `configs/navi/cheats/` |
-| `wtf`       | Terminal dashboard (`dash`): batteries, disks, git, homelab, feeds |
 
-Packages without a config of their own: `smassh` (typing practice, `typing`) and
+Packages without a config of their own: `ccusage` (token usage analysis) and
 `antigravity-cli` (`agy`, unfree, hence `nixpkgs.config.allowUnfree` in every
 system config).
 

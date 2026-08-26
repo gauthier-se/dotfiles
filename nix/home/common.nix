@@ -23,9 +23,8 @@ in
     tlrc
     wget
     zoxide
-    # Dashboard & fun
-    wtfutil # terminal dashboard
-    smassh # typing practice
+    # CLI tools & fun
+    ccusage # token usage analysis
     # Git & TUIs
     git
     gh
@@ -48,12 +47,12 @@ in
     antigravity-cli
     # Learning
     (bootdev-cli.overrideAttrs (_: rec {
-      version = "1.31.1";
+      version = "1.32.1";
       src = fetchFromGitHub {
         owner = "bootdotdev";
         repo = "bootdev";
         tag = "v${version}";
-        hash = "sha256-0koZYMQxCHPtB44OYhiD9+nYAyHWXbyQd2xhdqnOqEw=";
+        hash = "sha256-DScpeUQdkzJy+RVkA8ZmGzp5Z9YzkvZViCoov64WAJk=";
       };
       vendorHash = "sha256-ZDioEU5uPCkd+kC83cLlpgzyOsnpj2S7N+lQgsQb8uY=";
       # That test shells out to /bin/sleep: present in the darwin build sandbox,
@@ -75,9 +74,6 @@ in
     ".vimrc".source = link "configs/vim/.vimrc";
     ".local/bin/tmux-sessionizer.sh".source = link "configs/tmux/.local/bin/tmux-sessionizer.sh";
     ".local/bin/obsidian-vault-setup".source = link "configs/obsidian/vault-setup.sh";
-    # wtf: the launcher resolves @HOME@ in the config before starting wtfutil,
-    # which expands neither "~" nor "$HOME" in module paths. Alias: dash.
-    ".local/bin/wtf-dashboard".source = link "configs/wtf/bin/dashboard.sh";
   };
 
   # alacritty is linked per-OS (darwin.nix / linux.nix): the laptop overrides
@@ -90,8 +86,5 @@ in
     "lazydocker".source = link "configs/lazydocker/.config/lazydocker";
     "atuin/config.toml".source = link "configs/atuin/.config/atuin/config.toml";
     "navi".source = link "configs/navi/.config/navi";
-    # No wtf entry on purpose: ~/.config/wtf/ is where wtfutil writes the todo
-    # list, so it stays a real directory owned by the machine. The dashboard
-    # config is read from the repo by ~/.local/bin/wtf-dashboard instead.
   };
 }
