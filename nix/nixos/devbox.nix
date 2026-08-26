@@ -8,6 +8,7 @@ let
   # is the only way in.
   authorizedKeys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILuL65N5OYZw+yJcghWu7aIsocUjcNuYbedgDsUZu3eI gauthier"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGvZTl4Y0ruWDeL6osQwdFOcjXqxPvenM6HkAwnhs57c termius-iphone"
   ];
 in
 {
@@ -52,6 +53,24 @@ in
   };
 
   services.tailscale.enable = true;
+
+  # Tailscale accepts advertised routes, including the subnet this machine is
+  # already on. Table 52 is consulted before main, so local traffic would leave
+  # through the tunnel and inbound sessions get answered on the wrong path.
+  # Keep the local subnet on the main table.
+  systemd.services.tailscale-local-subnet = {
+    description = "Keep the local subnet out of the Tailscale route table";
+    after = [ "tailscaled.service" ];
+    wants = [ "tailscaled.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStartPre = "-${pkgs.iproute2}/bin/ip rule del to 10.10.20.0/24 lookup main priority 5260";
+      ExecStart = "${pkgs.iproute2}/bin/ip rule add to 10.10.20.0/24 lookup main priority 5260";
+      ExecStop = "-${pkgs.iproute2}/bin/ip rule del to 10.10.20.0/24 lookup main priority 5260";
+    };
+  };
 
   services.openssh = {
     enable = true;
