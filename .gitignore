@@ -6,5 +6,10 @@
 .luarc.json
 tags
 
-# Tmux plugins (managed by TPM)
-tmux/.config/tmux/plugins/
+# Tmux plugins. TPM clones them at runtime, and into ~/.tmux/plugins
+# rather than here. The previous rule was missing the `configs/` prefix, so it
+# matched nothing and six empty gitlinks got committed instead.
+configs/tmux/.config/tmux/plugins/
+
+# Runtime logs
+*.log
