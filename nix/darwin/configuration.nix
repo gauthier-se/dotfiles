@@ -70,7 +70,6 @@
     casks = [
       # Desktop
       "nikitabobko/tap/aerospace"
-      "alacritty"
       "raycast"
       # Apps
       "brave-browser"

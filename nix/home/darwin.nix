@@ -8,6 +8,10 @@ in
   imports = [ ./common.nix ];
 
   home.packages = with pkgs; [
+    # Terminal. Not a cask: Homebrew disabled the alacritty cask in 09/2026
+    # (it no longer passes the macOS Gatekeeper check), so it stopped being
+    # upgradable. The nixpkgs build lands in ~/Applications/Home Manager Apps.
+    alacritty
     jankyborders # started by aerospace
   ];
 
