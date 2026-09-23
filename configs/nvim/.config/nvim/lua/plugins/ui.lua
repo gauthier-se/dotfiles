@@ -1,11 +1,12 @@
 return {
-  { -- Colorscheme
+  { -- Colorscheme: moonfly (dark) or github_light, following the `theme` script
     'bluz71/vim-moonfly-colors',
     name = 'moonfly',
     priority = 1000,
+    dependencies = { 'projekt0n/github-nvim-theme' },
     config = function()
       vim.g.moonflyWinSeparator = 2 -- thin line separators instead of blocks
-      vim.cmd.colorscheme 'moonfly'
+      require('theme').setup()
     end,
   },
 
@@ -14,7 +15,7 @@ return {
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     opts = {
       options = {
-        theme = 'moonfly',
+        theme = 'auto', -- picks lualine/themes/<colors_name>, reloaded on ColorScheme
         component_separators = { left = '', right = '' },
         section_separators = { left = '', right = '' },
       },

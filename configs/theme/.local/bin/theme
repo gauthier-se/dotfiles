@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Switch Alacritty, tmux and nvim between dark (moonfly) and light (github-light).
+# Usage: theme [dark|light|toggle]   (default: toggle)
+#
+# Writes small files in ~/.local/state/theme that each tool picks up:
+#   alacritty.toml  imported by alacritty.toml, live-reloaded by Alacritty
+#   tmux.conf       sourced by tmux.conf, re-sourced here
+#   mode            watched by nvim (lua/theme.lua)
+set -euo pipefail
+
+state="$HOME/.local/state/theme"
+configs="$HOME/dotfiles/configs"
+current=$(cat "$state/mode" 2>/dev/null || echo dark)
+
+case "${1:-toggle}" in
+  dark | light) mode=$1 ;;
+  toggle) [[ $current == dark ]] && mode=light || mode=dark ;;
+  *)
+    echo "usage: theme [dark|light|toggle]" >&2
+    exit 1
+    ;;
+esac
+
+case $mode in
+  dark) name=moonfly ;;
+  light) name=github-light ;;
+esac
+
+mkdir -p "$state"
+# A copy, not an import: Alacritty only watches files that hold config
+cp "$configs/alacritty/.config/alacritty/themes/$name.toml" "$state/alacritty.toml"
+printf 'source-file %s\n' "$configs/tmux/.config/tmux/themes/$name.conf" >"$state/tmux.conf"
+echo "$mode" >"$state/mode"
+
+if tmux list-sessions &>/dev/null; then
+  tmux source-file ~/.config/tmux/tmux.conf
+fi
+
+echo "$mode"
