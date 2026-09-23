@@ -11,6 +11,13 @@ alias cat="bat -p"
 alias lg="lazygit"
 alias ld="lazydocker"
 
+# glow's "auto" style cannot detect the background inside tmux: follow the
+# `theme` script instead (its modes are glow's dark/light style names).
+# A -s passed on the command line still wins, the last flag is kept.
+glow() {
+  command glow -s "$(<~/.local/state/theme/mode 2>/dev/null || echo dark)" "$@"
+}
+
 # Dotfiles
 alias openzs="vim ~/dotfiles/configs/zsh/.zshrc"
 alias sourcezs="source ~/.zshrc"
