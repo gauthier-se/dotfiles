@@ -53,9 +53,11 @@
     };
   };
 
-  # Apply the wallpaper from the repo on every rebuild
+  # Apply the wallpaper from the repo on every rebuild, and keep the machine
+  # from sleeping (same as the "prevent automatic sleeping" toggle, via pmset).
   system.activationScripts.postActivation.text = ''
     sudo -u ${user} /usr/bin/osascript -e 'tell application "System Events" to tell every desktop to set picture to "/Users/${user}/dotfiles/wallpapers/wallpaper.jpg"' || true
+    /usr/bin/pmset -a sleep 0 displaysleep 0 disksleep 0
   '';
 
   homebrew = {
