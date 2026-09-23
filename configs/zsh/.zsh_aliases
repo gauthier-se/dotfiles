@@ -13,9 +13,10 @@ alias ld="lazydocker"
 
 # glow's "auto" style cannot detect the background inside tmux: follow the
 # `theme` script instead (its modes are glow's dark/light style names).
-# A -s passed on the command line still wins, the last flag is kept.
+# Also wraps at 100 columns instead of 80.
+# A -s or -w passed on the command line still wins, the last flag is kept.
 glow() {
-  command glow -s "$(<~/.local/state/theme/mode 2>/dev/null || echo dark)" "$@"
+  command glow -s "$(<~/.local/state/theme/mode 2>/dev/null || echo dark)" -w 100 "$@"
 }
 
 # Dotfiles
