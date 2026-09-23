@@ -1,7 +1,7 @@
 git:
-  pagers:
+  diffRenderers:
     - colorArg: always
-      pager: delta --paging=never
+      command: delta --paging=never
 gui:
   theme:
     activeBorderColor:
@@ -21,7 +21,6 @@ gui:
       - "#ff5454"
     defaultFgColor:
       - "#bdbdbd"
-
 keybinding:
   universal:
     jumpToBlock:
