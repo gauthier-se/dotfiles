@@ -95,7 +95,6 @@
       "openemu"
       "dolphin"
       "steam"
-      "battle-net"
       "native-access" # installs Guitar Rig 7 and other NI products
     ];
     # Mac App Store (needs to be signed in)
