@@ -13,6 +13,7 @@ in
     # upgradable. The nixpkgs build lands in ~/Applications/Home Manager Apps.
     alacritty
     jankyborders # started by aerospace
+    zed-editor
   ];
 
   xdg.configFile = {
