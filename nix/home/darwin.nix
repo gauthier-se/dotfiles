@@ -16,6 +16,12 @@ in
     zed-editor
   ];
 
+  # Copy GUI apps into ~/Applications/Home Manager Apps instead of symlinking
+  # them: Spotlight and Raycast skip symlinked .app bundles. Already the
+  # default from home.stateVersion 25.11, ours is 25.05.
+  targets.darwin.linkApps.enable = false;
+  targets.darwin.copyApps.enable = true;
+
   xdg.configFile = {
     "aerospace".source = link "configs/aerospace/.config/aerospace";
     "alacritty/alacritty.toml".source = link "configs/alacritty/.config/alacritty/alacritty.toml";
