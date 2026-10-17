@@ -53,11 +53,14 @@
     };
   };
 
-  # Apply the wallpaper from the repo on every rebuild, and keep the machine
-  # from sleeping (same as the "prevent automatic sleeping" toggle, via pmset).
+  # Apply the wallpaper from the repo on every rebuild, keep the machine from
+  # sleeping (same as the "prevent automatic sleeping" toggle, via pmset) and
+  # never start the screen saver when idle (per-host pref, so not settable
+  # through system.defaults).
   system.activationScripts.postActivation.text = ''
     sudo -u ${user} /usr/bin/osascript -e 'tell application "System Events" to tell every desktop to set picture to "/Users/${user}/dotfiles/wallpapers/wallpaper.jpg"' || true
     /usr/bin/pmset -a sleep 0 displaysleep 0 disksleep 0
+    sudo -u ${user} /usr/bin/defaults -currentHost write com.apple.screensaver idleTime -int 0
   '';
 
   homebrew = {
