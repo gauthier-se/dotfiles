@@ -9,6 +9,21 @@ return {
         topdelete = { text = '‾' },
         changedelete = { text = '~' },
       },
+      on_attach = function(bufnr)
+        local gitsigns = require 'gitsigns'
+        local function map(mode, l, r, desc)
+          vim.keymap.set(mode, l, r, { buffer = bufnr, desc = desc })
+        end
+
+        map('n', ']h', function() gitsigns.nav_hunk 'next' end, 'Next git [H]unk')
+        map('n', '[h', function() gitsigns.nav_hunk 'prev' end, 'Previous git [H]unk')
+
+        map('n', '<leader>hs', gitsigns.stage_hunk, '[H]unk [S]tage')
+        map('n', '<leader>hr', gitsigns.reset_hunk, '[H]unk [R]eset')
+        map('v', '<leader>hs', function() gitsigns.stage_hunk { vim.fn.line '.', vim.fn.line 'v' } end, '[H]unk [S]tage lines')
+        map('v', '<leader>hr', function() gitsigns.reset_hunk { vim.fn.line '.', vim.fn.line 'v' } end, '[H]unk [R]eset lines')
+        map('n', '<leader>hp', gitsigns.preview_hunk, '[H]unk [P]review')
+      end,
     },
   },
 
