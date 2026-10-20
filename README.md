@@ -30,9 +30,7 @@ everywhere.
 | `atuin`     | Shell history in SQLite, `ctrl-r` search (local only, no sync) |
 | `navi`      | Interactive cheatsheets on `ctrl-g`, the cheats live in `configs/navi/cheats/` |
 
-Packages without a config of their own: `ccusage` (token usage analysis) and
-`antigravity-cli` (`agy`, unfree, hence `nixpkgs.config.allowUnfree` in every
-system config).
+Packages without a config of their own: `ccusage` (token usage analysis).
 
 ### macOS only
 

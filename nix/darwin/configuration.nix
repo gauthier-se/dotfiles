@@ -7,7 +7,6 @@
   system.stateVersion = 6;
   system.primaryUser = user;
   nixpkgs.hostPlatform = "aarch64-darwin";
-  nixpkgs.config.allowUnfree = true; # antigravity-cli
 
   users.users.${user}.home = "/Users/${user}";
 

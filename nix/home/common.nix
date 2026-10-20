@@ -43,8 +43,6 @@ in
     nixd # nix files
     # Baseline runtime: projects use their own version via devshells
     nodejs_24
-    # Agent CLI (unfree: the system configs set nixpkgs.config.allowUnfree)
-    antigravity-cli
     # Learning
     (bootdev-cli.overrideAttrs (_: rec {
       version = "1.32.1";
