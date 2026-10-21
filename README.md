@@ -27,8 +27,6 @@ everywhere.
 | `git`       | Git configuration (delta, Moonfly theme)     |
 | `lazygit`   | Git TUI                                      |
 | `lazydocker`| Docker TUI                                   |
-| `atuin`     | Shell history in SQLite, `ctrl-r` search (local only, no sync) |
-| `navi`      | Interactive cheatsheets on `ctrl-g`, the cheats live in `configs/navi/cheats/` |
 
 Packages without a config of their own: `ccusage` (token usage analysis).
 

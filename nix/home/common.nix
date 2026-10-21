@@ -10,7 +10,6 @@ in
 
   home.packages = with pkgs; [
     # Everyday CLI
-    atuin # shell history: ctrl-r search, sqlite-backed
     bat
     btop
     fastfetch
@@ -18,7 +17,6 @@ in
     fzf
     httpie
     jq
-    navi # interactive cheatsheets, ctrl-g
     ripgrep
     tlrc
     wget
@@ -43,20 +41,6 @@ in
     nixd # nix files
     # Baseline runtime: projects use their own version via devshells
     nodejs_24
-    # Learning
-    (bootdev-cli.overrideAttrs (_: rec {
-      version = "1.32.1";
-      src = fetchFromGitHub {
-        owner = "bootdotdev";
-        repo = "bootdev";
-        tag = "v${version}";
-        hash = "sha256-DScpeUQdkzJy+RVkA8ZmGzp5Z9YzkvZViCoov64WAJk=";
-      };
-      vendorHash = "sha256-ZDioEU5uPCkd+kC83cLlpgzyOsnpj2S7N+lQgsQb8uY=";
-      # That test shells out to /bin/sleep: present in the darwin build sandbox,
-      # absent from the Linux one, so the package fails to build on NixOS.
-      checkFlags = [ "-skip" "^TestGetLatestVersionHasOverallTimeout$" ];
-    }))
   ];
 
   programs.direnv = {
@@ -83,7 +67,5 @@ in
     "tmuxinator".source = link "configs/tmux/.config/tmuxinator";
     "lazygit".source = link "configs/lazygit/.config/lazygit";
     "lazydocker".source = link "configs/lazydocker/.config/lazydocker";
-    "atuin/config.toml".source = link "configs/atuin/.config/atuin/config.toml";
-    "navi".source = link "configs/navi/.config/navi";
   };
 }
