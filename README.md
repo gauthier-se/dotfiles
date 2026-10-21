@@ -28,8 +28,6 @@ everywhere.
 | `lazygit`   | Git TUI                                      |
 | `lazydocker`| Docker TUI                                   |
 
-Packages without a config of their own: `ccusage` (token usage analysis).
-
 ### macOS only
 
 | Package     | Description                                  |

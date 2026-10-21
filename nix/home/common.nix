@@ -21,8 +21,6 @@ in
     tlrc
     wget
     zoxide
-    # CLI tools & fun
-    ccusage # token usage analysis
     # Git & TUIs
     git
     gh
