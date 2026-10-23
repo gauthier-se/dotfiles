@@ -69,7 +69,13 @@
       # Fresh install: brew only ever contains what is declared here.
       cleanup = "zap";
     };
-    taps = [ "nikitabobko/tap" ];
+    taps = [
+      "nikitabobko/tap"
+      {
+        name = "OpenEmu-Silicon/OpenEmu-Silicon";
+        clone_target = "https://github.com/OpenEmu-Silicon/OpenEmu-Silicon";
+      }
+    ];
     brews = [ "mas" ];
     casks = [
       # Desktop
@@ -94,7 +100,7 @@
       "microsoft-word"
       # "microsoft-excel" "microsoft-powerpoint" "microsoft-outlook"
       # Gaming & music
-      "openemu"
+      "OpenEmu-Silicon/OpenEmu-Silicon/openemu-silicon" # native Apple Silicon fork, same library as OpenEmu
       "dolphin"
       "steam"
       "native-access" # installs Guitar Rig 7 and other NI products
