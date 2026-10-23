@@ -6,6 +6,7 @@ vim.g.have_nerd_font = true
 require 'options'
 require 'keymaps'
 require 'autocmds'
+require 'netrw_git'
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
