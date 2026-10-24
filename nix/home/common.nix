@@ -33,6 +33,7 @@ in
     neovim
     tmux
     tmuxinator
+    herdr # agent multiplexer: the Mac client also drives the devbox's agents over SSH
     # Editor tooling that isn't project-specific (project LSPs live in devshells)
     lua-language-server # nvim config
     stylua
