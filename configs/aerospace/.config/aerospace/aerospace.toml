@@ -2,8 +2,10 @@ config-version = 2
 start-at-login = true
 
 # Launch JankyBorders on startup (Moonfly Gray) — binary from home.packages
+# window-hooks.sh adds the Hyprland dwindle and close behaviours
 after-startup-command = [
-    'exec-and-forget borders active_color=0xff626262 inactive_color=0xff262626 width=7.0'
+    'exec-and-forget borders active_color=0xff626262 inactive_color=0xff262626 width=7.0',
+    'exec-and-forget ~/.config/aerospace/window-hooks.sh'
 ]
 
 # Normalizations (see https://nikitabobko.github.io/AeroSpace/guide#normalization)
