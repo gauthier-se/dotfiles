@@ -20,10 +20,11 @@ everywhere.
 | ----------- | -------------------------------------------- |
 | `nix/`      | The flake: system + user config, devshell templates |
 | `alacritty` | Terminal emulator (Moonfly theme)            |
-| `theme`     | `theme [dark\|light]` toggles Alacritty, tmux and nvim between Moonfly and GitHub Light |
+| `theme`     | `theme [dark\|light]` toggles Alacritty, tmux and nvim (herdr follows Alacritty) between Moonfly and GitHub Light |
 | `zsh`       | Zsh + zinit + Pure prompt                    |
 | `nvim`      | Neovim config (based on kickstart)           |
 | `tmux`      | Tmux + sessionizer script                    |
+| `herdr`     | Agent multiplexer, with the tmux bindings    |
 | `git`       | Git configuration (delta, Moonfly theme)     |
 | `lazygit`   | Git TUI                                      |
 | `lazydocker`| Docker TUI                                   |

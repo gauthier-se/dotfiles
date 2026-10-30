@@ -1,0 +1,96 @@
+onboarding = false
+
+# Follow Alacritty's palette, so the `theme` script switches herdr too
+[theme]
+name = "terminal"
+
+# Bright black, the base theme's row background, is unreadable on both palettes
+[theme.custom]
+active_row_bg = "reset"
+selection_bg = "blue"
+subtext0 = "darkgray"
+
+# Same bindings as tmux.conf: the tmux keys where herdr's defaults differ
+[keys]
+split_vertical = "prefix+percent"
+split_horizontal = "prefix+3"
+detach = "prefix+d"
+rename_tab = "prefix+comma"
+rename_workspace = "prefix+$"
+workspace_picker = ["prefix+s", "prefix+w"]
+settings = "prefix+shift+s"
+cycle_pane_next = "prefix+o"
+open_notification_target = "prefix+shift+o"
+last_pane = "prefix+semicolon"
+focus_pane_left = ["prefix+left", "prefix+h"]
+focus_pane_down = ["prefix+down", "prefix+j"]
+focus_pane_up = ["prefix+up", "prefix+k"]
+focus_pane_right = ["prefix+right", "prefix+l"]
+# No 3: it splits, as in tmux
+switch_tab = ["prefix+1", "prefix+2", "prefix+4", "prefix+5", "prefix+6", "prefix+7", "prefix+8", "prefix+9"]
+
+[[keys.command]]
+key = "prefix+f"
+type = "popup"
+command = "~/.local/bin/herdr-sessionizer.sh"
+
+# AZERTY bindings for tab navigation: switch_tab only accepts digits
+[[keys.command]]
+key = "prefix+&"
+type = "shell"
+command = "~/.local/bin/herdr-tab 1"
+
+[[keys.command]]
+key = "prefix+é"
+type = "shell"
+command = "~/.local/bin/herdr-tab 2"
+
+[[keys.command]]
+key = 'prefix+"'
+type = "shell"
+command = "~/.local/bin/herdr-tab 3"
+
+[[keys.command]]
+key = "prefix+'"
+type = "shell"
+command = "~/.local/bin/herdr-tab 4"
+
+[[keys.command]]
+key = "prefix+("
+type = "shell"
+command = "~/.local/bin/herdr-tab 5"
+
+[[keys.command]]
+key = "prefix+§"
+type = "shell"
+command = "~/.local/bin/herdr-tab 6" # Mac AZERTY
+
+[[keys.command]]
+key = "prefix+minus"
+type = "shell"
+command = "~/.local/bin/herdr-tab 6" # PC AZERTY
+
+[[keys.command]]
+key = "prefix+è"
+type = "shell"
+command = "~/.local/bin/herdr-tab 7"
+
+[[keys.command]]
+key = "prefix+!"
+type = "shell"
+command = "~/.local/bin/herdr-tab 8" # Mac AZERTY
+
+[[keys.command]]
+key = "prefix+_"
+type = "shell"
+command = "~/.local/bin/herdr-tab 8" # PC AZERTY
+
+[[keys.command]]
+key = "prefix+ç"
+type = "shell"
+command = "~/.local/bin/herdr-tab 9"
+
+[[keys.command]]
+key = "prefix+à"
+type = "shell"
+command = "~/.local/bin/herdr-tab 10"

@@ -54,6 +54,8 @@ in
     "moonfly.gitconfig".source = link "configs/git/moonfly.gitconfig";
     ".vimrc".source = link "configs/vim/.vimrc";
     ".local/bin/tmux-sessionizer.sh".source = link "configs/tmux/.local/bin/tmux-sessionizer.sh";
+    ".local/bin/herdr-sessionizer.sh".source = link "configs/herdr/.local/bin/herdr-sessionizer.sh";
+    ".local/bin/herdr-tab".source = link "configs/herdr/.local/bin/herdr-tab";
     ".local/bin/theme".source = link "configs/theme/.local/bin/theme";
     ".local/bin/obsidian-vault-setup".source = link "configs/obsidian/vault-setup.sh";
   };
@@ -64,6 +66,8 @@ in
     "nvim".source = link "configs/nvim/.config/nvim";
     "tmux".source = link "configs/tmux/.config/tmux";
     "tmuxinator".source = link "configs/tmux/.config/tmuxinator";
+    # Just the file: herdr keeps its sockets and session state in this directory
+    "herdr/config.toml".source = link "configs/herdr/.config/herdr/config.toml";
     "lazygit".source = link "configs/lazygit/.config/lazygit";
     "lazydocker".source = link "configs/lazydocker/.config/lazydocker";
   };

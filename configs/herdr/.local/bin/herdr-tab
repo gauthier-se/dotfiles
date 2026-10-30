@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Focus the Nth tab of the active workspace (bound in herdr's config.toml).
+set -euo pipefail
+
+tab=$(herdr tab list --workspace "$HERDR_ACTIVE_WORKSPACE_ID" | jq -r ".result.tabs[$(($1 - 1))].tab_id // empty")
+[[ -z $tab ]] || herdr tab focus "$tab"
