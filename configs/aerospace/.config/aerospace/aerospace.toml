@@ -114,3 +114,9 @@ alt-shift-l = ['join-with right', 'mode main']
 # Make nix-managed binaries (borders…) visible to exec-and-forget
 [exec.env-vars]
 PATH = '/etc/profiles/per-user/segau/bin:/run/current-system/sw/bin:/opt/homebrew/bin:/usr/bin:/bin'
+
+# Staying on top is OpenEmu's own setting (OEPopoutGameWindowAlwaysOnTop),
+# AeroSpace has no z-order control
+[[on-window-detected]]
+if = 'test %{app-bundle-id} = org.openemu.OpenEmu'
+run = 'layout floating'
