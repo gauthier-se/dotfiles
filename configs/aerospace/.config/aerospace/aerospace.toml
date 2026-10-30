@@ -109,15 +109,6 @@ alt-shift-l = ['join-with right', 'mode main']
 9  = 'secondary'
 10 = 'secondary'
 
-# Auto-assign apps to workspaces on launch
-[[on-window-detected]]
-if.app-id = 'com.brave.Browser'
-run = 'move-node-to-workspace 1'
-
-[[on-window-detected]]
-if.app-id = 'org.alacritty'
-run = 'move-node-to-workspace 2'
-
 # Make nix-managed binaries (borders…) visible to exec-and-forget
 [exec.env-vars]
 PATH = '/etc/profiles/per-user/segau/bin:/run/current-system/sw/bin:/opt/homebrew/bin:/usr/bin:/bin'
