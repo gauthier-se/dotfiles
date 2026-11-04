@@ -81,6 +81,7 @@
       # Desktop
       "nikitabobko/tap/aerospace"
       "raycast"
+      "superwhisper" # dictation, toggled with Option+S
       # Apps
       "brave-browser"
       "firefox"
