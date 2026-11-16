@@ -13,3 +13,7 @@ configs/tmux/.config/tmux/plugins/
 
 # Runtime logs
 *.log
+
+# Nix build output symlinks
+result
+result-*
