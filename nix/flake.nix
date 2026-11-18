@@ -16,13 +16,9 @@
       url = "github:NixOS/nixos-hardware/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    disko = {
-      url = "github:nix-community/disko";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager, nix-homebrew, nixos-hardware, disko }:
+  outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager, nix-homebrew, nixos-hardware }:
   let
     user = "segau";
   in {
@@ -75,29 +71,6 @@
             useUserPackages = true;
             backupFileExtension = "before-nix";
             users.${user} = import ./home/linux.nix;
-          };
-        }
-      ];
-    };
-
-    # Dev box: nix run github:nix-community/nixos-anywhere -- \
-    #   --flake ~/dotfiles/nix#devbox --build-on remote root@10.10.20.20
-    nixosConfigurations."devbox" = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = { inherit inputs user; };
-      modules = [
-        ./nixos/devbox.nix
-
-        disko.nixosModules.disko
-        ./nixos/devbox-disko.nix
-
-        home-manager.nixosModules.home-manager
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            backupFileExtension = "before-nix";
-            users.${user} = import ./home/server.nix;
           };
         }
       ];

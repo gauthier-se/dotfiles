@@ -1,20 +1,16 @@
-# Nix config: nix-darwin (Mac) + NixOS (laptop, dev box), shared home-manager
+# Nix config: nix-darwin (Mac) + NixOS (laptop), shared home-manager
 
-One flake, three machines:
+One flake, two machines:
 
 - `darwinConfigurations."segaus-MacBook-Pro"` for macOS: CLI packages (nixpkgs),
   GUI apps (Homebrew casks), macOS settings.
 - `nixosConfigurations."laptop"` for NixOS: Hyprland + Waybar + Fuzzel,
   greetd/tuigreet login, PipeWire, NetworkManager.
-- `nixosConfigurations."devbox"`, the headless VM in the homelab, reached over SSH
-  from the terminal and from the phone. No desktop, no display server: the same
-  shell and editor as the other two, on a machine that does not close at night.
 
-All three import the same `home/common.nix` (CLI tools, nvim, tmux, zsh…), with
+Both import the same `home/common.nix` (CLI tools, nvim, tmux, zsh…), with
 dotfiles symlinked from `../configs/`. Platform-specific bits live in
-`home/darwin.nix` (aerospace, jankyborders), `home/linux.nix` (hypr, waybar,
-fuzzel, mako, GUI apps) and `home/server.nix` (common.nix plus the agent CLI,
-nothing graphical).
+`home/darwin.nix` (aerospace, jankyborders) and `home/linux.nix` (hypr, waybar,
+fuzzel, mako, GUI apps).
 
 ## Bootstrap (fresh Mac)
 
@@ -71,49 +67,14 @@ reboot
 After the first boot, log in via tuigreet, then set your password properly and
 commit the `hardware-configuration.nix` you copied into the repo.
 
-## Bootstrap (dev box: homelab VM)
-
-No ISO and no console: the VM is created by OpenTofu from a Debian cloud image
-(guest 220 in the homelab repo), and [nixos-anywhere](https://github.com/nix-community/nixos-anywhere)
-then kexecs into the NixOS installer over SSH, partitions with disko
-(`nixos/devbox-disko.nix`) and installs on top. The seed image is only there to
-answer an SSH connection once.
-
-```bash
-# From the Mac, once `tofu apply` has created the VM:
-nix run github:nix-community/nixos-anywhere -- \
-  --flake ~/dotfiles/nix#devbox \
-  --build-on remote \
-  root@10.10.20.20
-
-# Then join the tailnet, once (this is what makes it reachable from the phone):
-ssh segau@10.10.20.20 -- sudo tailscale up
-```
-
-`--build-on remote` is not an optimization: this Mac is aarch64 and cannot
-produce the x86_64 closure at all, while the VM has four cores and a Nix daemon
-of its own.
-
-Re-running the command reinstalls the machine from scratch. Nothing there is
-meant to survive it: projects live in git, the system lives in this flake, and
-`~/dotfiles` is cloned back by a one-shot unit on first boot (home-manager
-symlinks nvim/tmux/zsh *into* that repo, so they dangle until it exists).
-
-Full rationale, network placement and access notes: `docs/services/devbox.md` in
-the homelab repo.
-
 ## Day-to-day
 
 ```bash
 # Mac: apply a config change (alias: update)
 sudo darwin-rebuild switch --flake ~/dotfiles/nix
 
-# Laptop / dev box: same idea, the attribute is the hostname
+# Laptop: same idea, the attribute is the hostname
 sudo nixos-rebuild switch --flake ~/dotfiles/nix#laptop
-
-# Dev box, without logging into it (the Mac only evaluates; it builds there)
-nixos-rebuild switch --flake ~/dotfiles/nix#devbox \
-  --target-host root@10.10.20.20 --build-host root@10.10.20.20
 
 # Upgrade everything (alias: upgrade). Bump the lockfile, rebuild, then Homebrew.
 # Commit the resulting flake.lock: it is what keeps both machines in sync.
@@ -134,8 +95,7 @@ sudo nix-collect-garbage -d && nix-collect-garbage -d && sudo nix store optimise
 
 `update` and `upgrade` are defined per-OS in `configs/zsh/.zsh_aliases` (the file is
 shared, so it branches on `$OSTYPE`): the NixOS variants skip the Homebrew step and
-target `#$HOST`, so the same alias rebuilds the laptop on the laptop and the dev box
-on the dev box.
+target `#$HOST`, so the alias rebuilds whichever NixOS machine it is typed on.
 
 Configs (`nvim`, `tmux`, `aerospace`…) are symlinked outside the Nix store:
 they stay editable without a rebuild.
