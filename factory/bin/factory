@@ -5,14 +5,20 @@
 # build time. Meant to be started as the `agents` user, from a herdr pane on the
 # factory: the pane then shows the agent's state (working, blocked, done).
 #
-#   factory <owner/repo> <issue> [--sans-permissions]
+#   factory <owner/repo> <issue> [--force] [--sans-permissions]
 #   factory list
 #   factory clean <task> | --all
 #
+# The issue must carry the `agent-ready` label (Matt Pocock's triage flow, the
+# one the repositories' AGENTS.md describe); --force skips that check. The
+# agent then runs /mattpocock-skills:implement on it and follows the
+# repository's own rules for the branch name, the commits and the PR.
+#
 # Secrets, all on the factory and never in a repository:
 #   ~/.config/factory/secrets/claude-oauth-token     from `claude setup-token`
-#   ~/.config/factory/secrets/gh/<owner>__<repo>     fine-grained PAT, one repo
-# Without a PAT the agent works locally and cannot push.
+#   ~/.config/factory/secrets/gh/<owner>__<repo>     fine-grained PAT, one repo,
+#                                                    required: without it the
+#                                                    agent can read nothing
 
 CONFIG=/etc/factory/devcontainer.json
 ROOT="$HOME/factory/tasks"
@@ -26,7 +32,7 @@ die() { echo "factory: $*" >&2; exit 1; }
 
 usage() {
   sed -n 's/^#   //p' "$0" 2>/dev/null || true
-  echo "usage: factory <owner/repo> <issue> [--sans-permissions] | list | clean <task>|--all" >&2
+  echo "usage: factory <owner/repo> <issue> [--force] [--sans-permissions] | list | clean <task>|--all" >&2
   exit 2
 }
 
@@ -65,23 +71,38 @@ cmd_clean() {
 }
 
 cmd_run() {
-  repo_slug=$1 issue=$2 mode=auto
+  repo_slug=$1 issue=$2 mode=auto force=0
   shift 2
-  case "${1:-}" in
-    "") ;;
-    --sans-permissions) mode=bypass ;;
-    *) usage ;;
-  esac
+  for opt in "$@"; do
+    case "$opt" in
+      --sans-permissions) mode=bypass ;;
+      --force) force=1 ;;
+      *) usage ;;
+    esac
+  done
   [[ "$repo_slug" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]] || die "repository must be owner/repo"
   [[ "$issue" =~ ^[0-9]+$ ]] || die "issue must be a number"
   [ -r "$SECRETS/claude-oauth-token" ] || die "missing $SECRETS/claude-oauth-token (claude setup-token)"
 
   owner=${repo_slug%/*} name=${repo_slug#*/}
+  pat_file="$SECRETS/gh/${owner}__${name}"
+  [ -r "$pat_file" ] || die "no PAT for $repo_slug in $pat_file: the agent could not even read the issue"
+
+  # Checked before anything starts: an issue that is not ready costs nothing,
+  # and the agent never gets the chance to comment on it.
+  meta=$(GH_TOKEN=$(cat "$pat_file") gh issue view "$issue" -R "$repo_slug" --json title,state,labels,url) \
+    || die "cannot read $repo_slug#$issue"
+  title=$(jq -r .title <<<"$meta")
+  url=$(jq -r .url <<<"$meta")
+  [ "$(jq -r .state <<<"$meta")" = "OPEN" ] || die "$repo_slug#$issue is not open"
+  if [ "$force" -eq 0 ] && ! jq -e '.labels | map(.name) | index("agent-ready")' <<<"$meta" >/dev/null; then
+    die "$repo_slug#$issue ($title) is not labelled agent-ready; triage it first, or pass --force"
+  fi
+  echo "factory: $repo_slug#$issue: $title"
+
   task="$owner-$name-$issue"
   dir="$ROOT/$task"
   repo="$dir/repo" state="$dir/state" secrets="$dir/secrets"
-  branch="agent/issue-$issue"
-  pat_file="$SECRETS/gh/${owner}__${name}"
 
   mkdir -p "$state"
   ( umask 077 && mkdir -p "$secrets" )
@@ -89,20 +110,14 @@ cmd_run() {
   # Each task sees its own credentials only: the Claude token, and the PAT of
   # this one repository. Copied, so cleaning the task cannot touch the originals.
   install -m 600 "$SECRETS/claude-oauth-token" "$secrets/claude-oauth-token"
-  rm -f "$secrets/gh-token"
-  if [ -r "$pat_file" ]; then
-    install -m 600 "$pat_file" "$secrets/gh-token"
-  fi
+  install -m 600 "$pat_file" "$secrets/gh-token"
 
   if [ ! -d "$repo/.git" ]; then
-    # The PAT goes in a one-off header, so it never lands in .git/config.
-    auth=()
-    if [ -r "$secrets/gh-token" ]; then
-      basic=$(printf 'x-access-token:%s' "$(cat "$secrets/gh-token")" | base64 -w0)
-      auth=(-c "http.https://github.com/.extraheader=Authorization: Basic $basic")
-    fi
-    git "${auth[@]}" clone --quiet "https://github.com/$repo_slug.git" "$repo"
-    git -C "$repo" switch --quiet -c "$branch"
+    # The PAT goes in a one-off header, so it never lands in .git/config. No
+    # branch here: its name is the repository's convention, the agent's job.
+    basic=$(printf 'x-access-token:%s' "$(cat "$secrets/gh-token")" | base64 -w0)
+    git -c "http.https://github.com/.extraheader=Authorization: Basic $basic" \
+      clone --quiet "https://github.com/$repo_slug.git" "$repo"
     git -C "$repo" config user.name "$GIT_NAME"
     git -C "$repo" config user.email "$GIT_EMAIL"
   else
@@ -146,12 +161,11 @@ cmd_run() {
   }
   trap cleanup EXIT
 
-  if [ -r "$secrets/gh-token" ]; then
-    finish="Pousse la branche $branch et ouvre une pull request qui référence l'issue (Closes #$issue). Si quelque chose te bloque, explique-le dans un commentaire sur l'issue plutôt que de deviner."
-  else
-    finish="Tu n'as pas d'accès en écriture au dépôt : ne pousse rien, travaille en local sur la branche $branch et termine par un résumé de ce qui reste à faire."
-  fi
-  prompt="Traite l'issue #$issue du dépôt $repo_slug. Lis-la avec \`gh issue view $issue --comments\`, puis implémente-la en TDD, par petits commits clairs, en suivant les conventions du dépôt (CLAUDE.md, README). Lance les tests avant de conclure. $finish"
+  # Matt Pocock's implement skill (tdd at the seams, then code-review, then a
+  # commit) has disable-model-invocation set: it only runs when called by name.
+  # The repository's AGENTS.md or CLAUDE.md says the rest, including what to do
+  # when the issue is not clear enough to implement.
+  prompt="/mattpocock-skills:implement $url ($repo_slug#$issue, « $title »). Suis l'AGENTS.md ou le CLAUDE.md du dépôt : nom de branche, commits, modèle de pull request. Une fois le travail commité, pousse la branche et ouvre la pull request avec gh, en rédigeant son corps avec la skill pr."
 
   if [ "$mode" = bypass ]; then
     dc exec "$repo" claude-task --dangerously-skip-permissions "$prompt"
