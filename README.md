@@ -5,6 +5,10 @@ Personal setup for two machines, fully declarative and managed with **Nix**:
 - **MacBook Pro**: [nix-darwin](https://github.com/nix-darwin/nix-darwin)
 - **Laptop (NixOS)**: Hyprland + Waybar + Fuzzel, tuigreet login, LUKS full-disk encryption
 
+The same flake also describes the **agent factory**, a headless homelab VM that
+runs coding agents in per-task containers: `nix/nixos/factory.nix`, and its
+task image and dev container template in [`factory/`](factory/).
+
 Both share the same [home-manager](https://github.com/nix-community/home-manager)
 config: one command rebuilds the whole system, from CLI packages and GUI apps to
 system settings, fonts and dotfiles. Same minimalist philosophy everywhere, Moonfly theme

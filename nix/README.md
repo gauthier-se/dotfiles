@@ -1,13 +1,20 @@
-# Nix config: nix-darwin (Mac) + NixOS (laptop), shared home-manager
+# Nix config: nix-darwin (Mac) + NixOS (laptop, factory), shared home-manager
 
-One flake, two machines:
+One flake, two personal machines and one homelab VM:
 
 - `darwinConfigurations."segaus-MacBook-Pro"` for macOS: CLI packages (nixpkgs),
   GUI apps (Homebrew casks), macOS settings.
 - `nixosConfigurations."laptop"` for NixOS: Hyprland + Waybar + Fuzzel,
   greetd/tuigreet login, PipeWire, NetworkManager.
+- `nixosConfigurations."factory"`, the agent factory (homelab VM 270):
+  headless, rootless Podman for the `agents` and `lifeos` users, herdr and the
+  devcontainer CLI. No home-manager: it is not a workstation. Installed with
+  `nixos-anywhere --flake ~/dotfiles/nix#factory --build-on remote
+  root@10.10.70.10`; rebuilt with `nix run nixpkgs#nixos-rebuild -- switch
+  --flake ~/dotfiles/nix#factory --target-host root@10.10.70.10 --build-host
+  root@10.10.70.10`. Its task image lives in `../factory/`.
 
-Both import the same `home/common.nix` (CLI tools, nvim, tmux, zsh…), with
+The Mac and the laptop import the same `home/common.nix` (CLI tools, nvim, tmux, zsh…), with
 dotfiles symlinked from `../configs/`. Platform-specific bits live in
 `home/darwin.nix` (aerospace, jankyborders) and `home/linux.nix` (hypr, waybar,
 fuzzel, mako, GUI apps).

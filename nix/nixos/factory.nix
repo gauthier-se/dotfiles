@@ -100,6 +100,18 @@ in
     defaultNetwork.settings.dns_enabled = true;
   };
 
+  # The task image's build context and the dev container template, straight
+  # from this repository: the machine never clones the dotfiles. The `agents`
+  # user builds the image from here (see factory/image/Containerfile).
+  environment.etc."factory/image".source = pkgs.runCommand "factory-image-context" { } ''
+    mkdir -p $out
+    cp ${../../factory/image/Containerfile} $out/Containerfile
+    cp ${../../factory/image/claude-task} $out/claude-task
+    cp ${../../factory/image/settings.json} $out/settings.json
+    cp ${../../configs/claude/CLAUDE.md} $out/CLAUDE.md
+  '';
+  environment.etc."factory/devcontainer.json".source = ../../factory/devcontainer.json;
+
   nix.settings.trusted-users = [ "root" user ]; # the box builds its own closures
 
   nix.gc = {

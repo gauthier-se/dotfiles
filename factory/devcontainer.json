@@ -1,0 +1,25 @@
+// Dev container for one factory task. The launcher points the devcontainer CLI
+// at this file with --config, so a cloned repository needs no .devcontainer of
+// its own. Expected in the environment: FACTORY_STATE, the per-task directory
+// the state hooks write into, read by the herdr relay on the host.
+{
+  "name": "factory-task",
+  "image": "localhost/factory-agent:latest",
+
+  // One fixed path, the one the image pre-trusts.
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+
+  // Rootless Podman maps the host user to root inside unless told otherwise.
+  // keep-id maps `agents` (uid 1000) onto `vscode` (uid 1000), so the clone is
+  // writable from inside and owned by `agents` outside.
+  "runArgs": ["--userns=keep-id:uid=1000,gid=1000"],
+  "containerUser": "vscode",
+  "remoteUser": "vscode",
+  "updateRemoteUserUID": false,
+
+  "mounts": [
+    "source=${localEnv:FACTORY_STATE},target=/run/factory-state,type=bind",
+    "source=${localEnv:HOME}/.config/factory/secrets,target=/run/secrets/factory,type=bind,readonly"
+  ]
+}

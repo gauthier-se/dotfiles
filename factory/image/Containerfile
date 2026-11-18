@@ -1,0 +1,48 @@
+# Task image for the agent factory (homelab VM 270, ADR-0019 in the private
+# docs). One container per task, thrown away afterwards: nothing in here is
+# meant to persist, so Claude's configuration is baked in, not mounted.
+#
+# Built on the factory by the `agents` user, from the copy NixOS puts in
+# /etc/factory/image:
+#   podman build -t localhost/factory-agent:latest /etc/factory/image
+FROM mcr.microsoft.com/devcontainers/base:ubuntu-24.04
+
+# gh, from GitHub's own apt repository: the agent opens PRs with it.
+RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+      -o /usr/share/keyrings/githubcli-archive-keyring.gpg \
+ && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
+      > /etc/apt/sources.list.d/github-cli.list \
+ && apt-get update \
+ && apt-get install -y --no-install-recommends gh \
+ && rm -rf /var/lib/apt/lists/*
+
+# The wrapper reads the tokens from the read-only secrets mount at start, so
+# they never sit in the container's configuration or in `podman inspect`.
+COPY claude-task /usr/local/bin/claude-task
+RUN chmod 0755 /usr/local/bin/claude-task
+
+USER vscode
+WORKDIR /home/vscode
+
+# Pinned, and no auto-update: a new Claude Code is a rebuild, not a surprise
+# halfway through a task.
+ARG CLAUDE_CODE_VERSION=2.1.327
+ENV DISABLE_AUTOUPDATER=1 \
+    PATH=/home/vscode/.local/bin:$PATH
+RUN curl -fsSL https://claude.ai/install.sh | bash -s "$CLAUDE_CODE_VERSION" \
+ && claude --version
+
+# Global rules (no attribution, no em dash), state hooks for herdr, and the
+# skills the agents work with.
+COPY --chown=vscode:vscode CLAUDE.md settings.json /home/vscode/.claude/
+# A fresh install only knows the plugin directory. The skills come from the
+# same marketplace as on the Mac, declared by its repository.
+RUN claude plugin marketplace add anthropics/claude-plugins-official \
+ && claude plugin install mattpocock-skills@claude-plugins-official
+
+# First-run screens skipped, and the one workspace path pre-trusted: nobody is
+# there to answer them.
+RUN printf '%s\n' '{"hasCompletedOnboarding": true, "projects": {"/workspace": {"hasTrustDialogAccepted": true}}}' \
+      > /home/vscode/.claude.json
+
+WORKDIR /workspace

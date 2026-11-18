@@ -1,0 +1,18 @@
+#!/bin/sh
+# Start Claude in a factory task container with its credentials, read from the
+# read-only secrets mount rather than passed as environment, so they never show
+# in `podman inspect` or in a pane's scrollback.
+set -eu
+secrets=/run/secrets/factory
+
+CLAUDE_CODE_OAUTH_TOKEN=$(cat "$secrets/claude-oauth-token")
+export CLAUDE_CODE_OAUTH_TOKEN
+
+# A fine-grained PAT, one repository, with an expiry. Optional: without it the
+# agent works locally and cannot push.
+if [ -r "$secrets/gh-token" ]; then
+  GH_TOKEN=$(cat "$secrets/gh-token")
+  export GH_TOKEN
+fi
+
+exec claude "$@"
