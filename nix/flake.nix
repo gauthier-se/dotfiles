@@ -16,9 +16,13 @@
       url = "github:NixOS/nixos-hardware/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager, nix-homebrew, nixos-hardware }:
+  outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager, nix-homebrew, nixos-hardware, disko }:
   let
     user = "segau";
   in {
@@ -73,6 +77,19 @@
             users.${user} = import ./home/linux.nix;
           };
         }
+      ];
+    };
+
+    # Agent factory, homelab VM 270 (headless, no home-manager):
+    #   nix run github:nix-community/nixos-anywhere -- \
+    #     --flake ~/dotfiles/nix#factory --build-on remote root@10.10.70.10
+    nixosConfigurations."factory" = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      specialArgs = { inherit inputs user; };
+      modules = [
+        ./nixos/factory.nix
+        disko.nixosModules.disko
+        ./nixos/factory-disko.nix
       ];
     };
 
