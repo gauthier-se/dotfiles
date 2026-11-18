@@ -1,0 +1,168 @@
+# factory: run one coding agent on one GitHub issue, in its own container.
+#
+# Packaged by nix/nixos/factory.nix with writeShellApplication, which adds the
+# shebang, `set -euo pipefail` and the runtime inputs, and runs shellcheck at
+# build time. Meant to be started as the `agents` user, from a herdr pane on the
+# factory: the pane then shows the agent's state (working, blocked, done).
+#
+#   factory <owner/repo> <issue> [--sans-permissions]
+#   factory list
+#   factory clean <task> | --all
+#
+# Secrets, all on the factory and never in a repository:
+#   ~/.config/factory/secrets/claude-oauth-token     from `claude setup-token`
+#   ~/.config/factory/secrets/gh/<owner>__<repo>     fine-grained PAT, one repo
+# Without a PAT the agent works locally and cannot push.
+
+CONFIG=/etc/factory/devcontainer.json
+ROOT="$HOME/factory/tasks"
+SECRETS="$HOME/.config/factory/secrets"
+# Commits made by the agents carry the account's noreply address, never a
+# personal one.
+GIT_NAME="gauthier-se"
+GIT_EMAIL="139963620+gauthier-se@users.noreply.github.com"
+
+die() { echo "factory: $*" >&2; exit 1; }
+
+usage() {
+  sed -n 's/^#   //p' "$0" 2>/dev/null || true
+  echo "usage: factory <owner/repo> <issue> [--sans-permissions] | list | clean <task>|--all" >&2
+  exit 2
+}
+
+dc() {
+  devcontainer "$1" --docker-path podman --workspace-folder "$2" --config "$CONFIG" "${@:3}"
+}
+
+containers_of() {
+  podman ps -aq --filter "label=devcontainer.local_folder=$1"
+}
+
+cmd_list() {
+  [ -d "$ROOT" ] || exit 0
+  for dir in "$ROOT"/*/; do
+    [ -d "$dir" ] || continue
+    task=$(basename "$dir")
+    state=$(podman ps -a --filter "label=devcontainer.local_folder=${dir}repo" --format '{{.State}}' | head -1)
+    branch=$(git -C "${dir}repo" branch --show-current 2>/dev/null || true)
+    printf '%-40s %-10s %s\n' "$task" "${state:-none}" "$branch"
+  done
+}
+
+cmd_clean() {
+  [ $# -eq 1 ] || usage
+  if [ "$1" = "--all" ]; then
+    for dir in "$ROOT"/*/; do [ -d "$dir" ] && cmd_clean "$(basename "$dir")"; done
+    return 0
+  fi
+  dir="$ROOT/$1"
+  [ -d "$dir" ] || die "no task '$1'"
+  ids=$(containers_of "$dir/repo")
+  # shellcheck disable=SC2086 # one id per word
+  [ -z "$ids" ] || podman rm -f $ids >/dev/null
+  rm -rf "$dir"
+  echo "removed $1"
+}
+
+cmd_run() {
+  repo_slug=$1 issue=$2 mode=auto
+  shift 2
+  case "${1:-}" in
+    "") ;;
+    --sans-permissions) mode=bypass ;;
+    *) usage ;;
+  esac
+  [[ "$repo_slug" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]] || die "repository must be owner/repo"
+  [[ "$issue" =~ ^[0-9]+$ ]] || die "issue must be a number"
+  [ -r "$SECRETS/claude-oauth-token" ] || die "missing $SECRETS/claude-oauth-token (claude setup-token)"
+
+  owner=${repo_slug%/*} name=${repo_slug#*/}
+  task="$owner-$name-$issue"
+  dir="$ROOT/$task"
+  repo="$dir/repo" state="$dir/state" secrets="$dir/secrets"
+  branch="agent/issue-$issue"
+  pat_file="$SECRETS/gh/${owner}__${name}"
+
+  mkdir -p "$state"
+  ( umask 077 && mkdir -p "$secrets" )
+
+  # Each task sees its own credentials only: the Claude token, and the PAT of
+  # this one repository. Copied, so cleaning the task cannot touch the originals.
+  install -m 600 "$SECRETS/claude-oauth-token" "$secrets/claude-oauth-token"
+  rm -f "$secrets/gh-token"
+  if [ -r "$pat_file" ]; then
+    install -m 600 "$pat_file" "$secrets/gh-token"
+  fi
+
+  if [ ! -d "$repo/.git" ]; then
+    # The PAT goes in a one-off header, so it never lands in .git/config.
+    auth=()
+    if [ -r "$secrets/gh-token" ]; then
+      basic=$(printf 'x-access-token:%s' "$(cat "$secrets/gh-token")" | base64 -w0)
+      auth=(-c "http.https://github.com/.extraheader=Authorization: Basic $basic")
+    fi
+    git "${auth[@]}" clone --quiet "https://github.com/$repo_slug.git" "$repo"
+    git -C "$repo" switch --quiet -c "$branch"
+    git -C "$repo" config user.name "$GIT_NAME"
+    git -C "$repo" config user.email "$GIT_EMAIL"
+  else
+    echo "factory: resuming $task on $(git -C "$repo" branch --show-current)"
+  fi
+
+  export FACTORY_STATE="$state" FACTORY_SECRETS="$secrets"
+  out=$(dc up "$repo" 2>/dev/null | tail -1)
+  [ "$(jq -r .outcome <<<"$out" 2>/dev/null)" = "success" ] || die "container did not start: $out"
+
+  # The herdr relay (ADR-0019): the container's hooks append one word per state
+  # change to state/events; only those three words reach herdr, for this pane.
+  : >"$state/events"
+  relay_pid=""
+  if [ -n "${HERDR_PANE_ID:-}" ]; then
+    (
+      tail -n0 -F "$state/events" 2>/dev/null | while read -r word; do
+        case "$word" in
+          working | idle | blocked)
+            herdr pane report-agent "$HERDR_PANE_ID" --source factory-relay \
+              --agent claude --state "$word" >/dev/null 2>&1 || true
+            ;;
+        esac
+      done
+    ) &
+    relay_pid=$!
+  else
+    echo "factory: not in a herdr pane, running without state reporting" >&2
+  fi
+
+  cleanup() {
+    pkill -f -- "tail -n0 -F $state/events" 2>/dev/null || true
+    [ -z "$relay_pid" ] || kill "$relay_pid" 2>/dev/null || true
+    if [ -n "${HERDR_PANE_ID:-}" ]; then
+      herdr pane release-agent "$HERDR_PANE_ID" --source factory-relay --agent claude >/dev/null 2>&1 || true
+    fi
+    ids=$(containers_of "$repo")
+    # shellcheck disable=SC2086 # one id per word
+    [ -z "$ids" ] || podman rm -f $ids >/dev/null 2>&1 || true
+    echo "factory: container removed, clone kept in $repo (factory clean $task)"
+  }
+  trap cleanup EXIT
+
+  if [ -r "$secrets/gh-token" ]; then
+    finish="Pousse la branche $branch et ouvre une pull request qui référence l'issue (Closes #$issue). Si quelque chose te bloque, explique-le dans un commentaire sur l'issue plutôt que de deviner."
+  else
+    finish="Tu n'as pas d'accès en écriture au dépôt : ne pousse rien, travaille en local sur la branche $branch et termine par un résumé de ce qui reste à faire."
+  fi
+  prompt="Traite l'issue #$issue du dépôt $repo_slug. Lis-la avec \`gh issue view $issue --comments\`, puis implémente-la en TDD, par petits commits clairs, en suivant les conventions du dépôt (CLAUDE.md, README). Lance les tests avant de conclure. $finish"
+
+  if [ "$mode" = bypass ]; then
+    dc exec "$repo" claude-task --dangerously-skip-permissions "$prompt"
+  else
+    dc exec "$repo" claude-task --permission-mode auto "$prompt"
+  fi
+}
+
+case "${1:-}" in
+  list) cmd_list ;;
+  clean) shift; cmd_clean "$@" ;;
+  "" | -h | --help) usage ;;
+  *) [ $# -ge 2 ] || usage; cmd_run "$@" ;;
+esac

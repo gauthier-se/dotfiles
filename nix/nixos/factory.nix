@@ -24,6 +24,14 @@ let
     autoSubUidGidRange = true;
     openssh.authorizedKeys.keys = authorizedKeys;
   };
+
+  # The launcher, `factory <owner/repo> <issue>`, run by `agents` from a herdr
+  # pane. writeShellApplication runs shellcheck on it at build time.
+  factoryLauncher = pkgs.writeShellApplication {
+    name = "factory";
+    runtimeInputs = with pkgs; [ coreutils git gh jq procps podman devcontainer herdr ];
+    text = builtins.readFile ../../factory/bin/factory;
+  };
 in
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -129,5 +137,6 @@ in
     tmux
     herdr # the Mac's herdr drives panes here over SSH
     devcontainer # @devcontainers/cli, run against rootless Podman
+    factoryLauncher
   ];
 }

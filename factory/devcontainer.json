@@ -1,7 +1,8 @@
 // Dev container for one factory task. The launcher points the devcontainer CLI
 // at this file with --config, so a cloned repository needs no .devcontainer of
-// its own. Expected in the environment: FACTORY_STATE, the per-task directory
-// the state hooks write into, read by the herdr relay on the host.
+// its own. Expected in the environment, both set by the launcher per task:
+// FACTORY_STATE, the directory the state hooks write into, read by the herdr
+// relay on the host; FACTORY_SECRETS, that task's own credentials and no other.
 {
   "name": "factory-task",
   "image": "localhost/factory-agent:latest",
@@ -20,6 +21,6 @@
 
   "mounts": [
     "source=${localEnv:FACTORY_STATE},target=/run/factory-state,type=bind",
-    "source=${localEnv:HOME}/.config/factory/secrets,target=/run/secrets/factory,type=bind,readonly"
+    "source=${localEnv:FACTORY_SECRETS},target=/run/secrets/factory,type=bind,readonly"
   ]
 }

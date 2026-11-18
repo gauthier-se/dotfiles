@@ -13,6 +13,8 @@ export CLAUDE_CODE_OAUTH_TOKEN
 if [ -r "$secrets/gh-token" ]; then
   GH_TOKEN=$(cat "$secrets/gh-token")
   export GH_TOKEN
+  # `git push` over https then authenticates through gh, with the same token.
+  gh auth setup-git >/dev/null 2>&1 || true
 fi
 
 exec claude "$@"
