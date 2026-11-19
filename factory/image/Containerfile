@@ -32,8 +32,8 @@ ENV DISABLE_AUTOUPDATER=1 \
 RUN curl -fsSL https://claude.ai/install.sh | bash -s "$CLAUDE_CODE_VERSION" \
  && claude --version
 
-# Global rules (no attribution, no em dash), state hooks for herdr, and the
-# skills the agents work with.
+# Global rules (writing style), settings (state hooks for herdr, no commit or
+# PR attribution, concise output style), and the skills the agents work with.
 COPY --chown=vscode:vscode CLAUDE.md settings.json /home/vscode/.claude/
 # A fresh install only knows the plugin directory. The skills come from the
 # same marketplace as on the Mac, declared by its repository.

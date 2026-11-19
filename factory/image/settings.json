@@ -1,12 +1,93 @@
 {
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "outputStyle": "Concise",
   "hooks": {
-    "SessionStart": [{"hooks": [{"type": "command", "command": "echo idle >> /run/factory-state/events"}]}],
-    "UserPromptSubmit": [{"hooks": [{"type": "command", "command": "echo working >> /run/factory-state/events"}]}],
-    "PreToolUse": [{"matcher": "*", "hooks": [{"type": "command", "command": "echo working >> /run/factory-state/events"}]}],
-    "PostToolUse": [{"matcher": "*", "hooks": [{"type": "command", "command": "echo working >> /run/factory-state/events"}]}],
-    "PermissionRequest": [{"matcher": "*", "hooks": [{"type": "command", "command": "echo blocked >> /run/factory-state/events"}]}],
-    "Notification": [{"matcher": "permission_prompt", "hooks": [{"type": "command", "command": "echo blocked >> /run/factory-state/events"}]}],
-    "Stop": [{"hooks": [{"type": "command", "command": "echo idle >> /run/factory-state/events"}]}],
-    "SessionEnd": [{"hooks": [{"type": "command", "command": "echo exit >> /run/factory-state/events"}]}]
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo idle >> /run/factory-state/events"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo working >> /run/factory-state/events"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo working >> /run/factory-state/events"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo working >> /run/factory-state/events"
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo blocked >> /run/factory-state/events"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo blocked >> /run/factory-state/events"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo idle >> /run/factory-state/events"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo exit >> /run/factory-state/events"
+          }
+        ]
+      }
+    ]
   }
 }
