@@ -1,0 +1,31 @@
+# LifeOS on the agent factory (ADR-0019 in the private docs): one long-lived
+# container for the `lifeos` user, apart from the coding agents. Its home is a
+# named volume, so LifeOS, its memory and its TELOS survive a rebuild of this
+# image; the image only brings the tools.
+#
+# Built by `lifeos` from the copy NixOS puts in /etc/factory/lifeos; the user
+# service builds it on first start if it is missing.
+FROM mcr.microsoft.com/devcontainers/base:ubuntu-24.04
+
+COPY lifeos-claude /usr/local/bin/lifeos-claude
+RUN chmod 0755 /usr/local/bin/lifeos-claude
+
+USER vscode
+WORKDIR /home/vscode
+ENV PATH=/home/vscode/.bun/bin:/home/vscode/.local/bin:$PATH
+
+# LifeOS needs bun 1.2 or newer. Pinned like Claude Code: an upgrade is a
+# rebuild, decided, not a surprise.
+ARG BUN_VERSION=bun-v1.4.4
+RUN curl -fsSL https://bun.sh/install | bash -s "$BUN_VERSION" && bun --version
+
+ARG CLAUDE_CODE_VERSION=2.1.327
+ENV DISABLE_AUTOUPDATER=1
+RUN curl -fsSL https://claude.ai/install.sh | bash -s "$CLAUDE_CODE_VERSION" \
+ && claude --version
+
+# Global rules, the same as everywhere else.
+COPY --chown=vscode:vscode CLAUDE.md /home/vscode/.claude/CLAUDE.md
+RUN printf '%s\n' '{"hasCompletedOnboarding": true}' > /home/vscode/.claude.json
+
+CMD ["sleep", "infinity"]

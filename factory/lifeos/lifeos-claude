@@ -1,0 +1,7 @@
+#!/bin/sh
+# Start Claude inside the LifeOS container with its token, read from the
+# read-only secrets mount, so it never sits in the container's configuration.
+set -eu
+CLAUDE_CODE_OAUTH_TOKEN=$(cat /run/secrets/lifeos/claude-oauth-token)
+export CLAUDE_CODE_OAUTH_TOKEN
+exec claude "$@"

@@ -1,0 +1,18 @@
+# lifeos: open LifeOS, which runs in its own container for the `lifeos` user.
+#
+#   lifeos            Claude in the container, where LifeOS lives
+#   lifeos shell      a shell in the container (bun, the LifeOS tools)
+#   lifeos status     the user service and the container
+#
+# Packaged by nix/nixos/factory.nix with writeShellApplication. The container
+# itself is kept up by the `lifeos` user service, not by this command.
+
+case "${1:-}" in
+  shell) exec podman exec -it -w /home/vscode lifeos bash -l ;;
+  status)
+    systemctl --user --no-pager status lifeos.service | head -5 || true
+    podman ps --filter name=lifeos --format '{{.Names}} {{.Status}}'
+    ;;
+  "") exec podman exec -it -w /home/vscode lifeos lifeos-claude ;;
+  *) exec podman exec -it -w /home/vscode lifeos lifeos-claude "$@" ;;
+esac

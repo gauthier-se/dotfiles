@@ -32,6 +32,13 @@ let
     runtimeInputs = with pkgs; [ coreutils git gh jq procps podman devcontainer herdr ];
     text = builtins.readFile ../../factory/bin/factory;
   };
+
+  # `lifeos`, for the `lifeos` user: Claude in the LifeOS container.
+  lifeosCommand = pkgs.writeShellApplication {
+    name = "lifeos";
+    runtimeInputs = with pkgs; [ podman systemd ];
+    text = builtins.readFile ../../factory/lifeos/lifeos;
+  };
 in
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -119,6 +126,33 @@ in
     cp ${../../configs/claude/CLAUDE.md} $out/CLAUDE.md
   '';
   environment.etc."factory/devcontainer.json".source = ../../factory/devcontainer.json;
+  environment.etc."factory/lifeos".source = pkgs.runCommand "lifeos-image-context" { } ''
+    mkdir -p $out
+    cp ${../../factory/lifeos/Containerfile} $out/Containerfile
+    cp ${../../factory/lifeos/lifeos-claude} $out/lifeos-claude
+    cp ${../../configs/claude/CLAUDE.md} $out/CLAUDE.md
+  '';
+
+  # LifeOS's container, kept up by a user service of the `lifeos` user only
+  # (linger starts it at boot). Its home is the `lifeos-home` volume; its token
+  # comes read-only from ~lifeos/.config/lifeos/secrets; the dashboard port is
+  # published on the host's loopback only, reached through an SSH tunnel.
+  systemd.user.services.lifeos = {
+    description = "LifeOS container";
+    unitConfig.ConditionUser = "lifeos";
+    wantedBy = [ "default.target" ];
+    after = [ "network-online.target" ];
+    path = [ pkgs.podman "/run/wrappers" ];
+    serviceConfig = {
+      Restart = "on-failure";
+      RestartSec = 30;
+      ExecStartPre = "${pkgs.bash}/bin/bash -c 'podman image exists localhost/lifeos:latest || podman build -t localhost/lifeos:latest /etc/factory/lifeos'";
+      ExecStart = "${pkgs.podman}/bin/podman run --rm --replace --name lifeos --userns=keep-id:uid=1000,gid=1000 -v lifeos-home:/home/vscode -v %h/.config/lifeos/secrets:/run/secrets/lifeos:ro -p 127.0.0.1:31337:31337 localhost/lifeos:latest";
+      ExecStop = "${pkgs.podman}/bin/podman stop -t 10 lifeos";
+      TimeoutStartSec = 900;
+    };
+  };
+
 
   nix.settings.trusted-users = [ "root" user ]; # the box builds its own closures
 
@@ -138,5 +172,6 @@ in
     herdr # the Mac's herdr drives panes here over SSH
     devcontainer # @devcontainers/cli, run against rootless Podman
     factoryLauncher
+    lifeosCommand
   ];
 }

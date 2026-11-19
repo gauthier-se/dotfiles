@@ -57,6 +57,8 @@ in
     ".local/bin/herdr-sessionizer.sh".source = link "configs/herdr/.local/bin/herdr-sessionizer.sh";
     ".local/bin/herdr-tab".source = link "configs/herdr/.local/bin/herdr-tab";
     ".local/bin/theme".source = link "configs/theme/.local/bin/theme";
+    # Global Claude rules, shared with the factory's images (factory/).
+    ".claude/CLAUDE.md".source = link "configs/claude/CLAUDE.md";
   };
 
   # alacritty is linked per-OS (darwin.nix / linux.nix): the laptop overrides
