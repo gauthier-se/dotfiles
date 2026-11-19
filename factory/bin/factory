@@ -9,8 +9,9 @@
 #   factory list
 #   factory clean <task> | --all
 #
-# The issue must carry the `agent-ready` label (Matt Pocock's triage flow, the
-# one the repositories' AGENTS.md describe); --force skips that check. The
+# The issue must carry the AFK-ready triage label of Matt Pocock's flow, the one
+# the repositories' AGENTS.md describe: `agent-ready` (verve) or the skills'
+# default `ready-for-agent` (ccibook). --force skips that check. The
 # agent then runs /mattpocock-skills:implement on it and follows the
 # repository's own rules for the branch name, the commits and the PR.
 #
@@ -95,8 +96,8 @@ cmd_run() {
   title=$(jq -r .title <<<"$meta")
   url=$(jq -r .url <<<"$meta")
   [ "$(jq -r .state <<<"$meta")" = "OPEN" ] || die "$repo_slug#$issue is not open"
-  if [ "$force" -eq 0 ] && ! jq -e '.labels | map(.name) | index("agent-ready")' <<<"$meta" >/dev/null; then
-    die "$repo_slug#$issue ($title) is not labelled agent-ready; triage it first, or pass --force"
+  if [ "$force" -eq 0 ] && ! jq -e '.labels | map(.name) | any(. == "agent-ready" or . == "ready-for-agent")' <<<"$meta" >/dev/null; then
+    die "$repo_slug#$issue ($title) is not labelled agent-ready or ready-for-agent; triage it first, or pass --force"
   fi
   echo "factory: $repo_slug#$issue: $title"
 

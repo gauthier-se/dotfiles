@@ -29,7 +29,7 @@ runs shellcheck at build time.
 |------|------------|
 | `bin/factory` | The launcher: `factory <owner/repo> <issue> [--force] [--sans-permissions]`, `factory list`, `factory clean` |
 | `devcontainer.json` | The dev container every task uses, passed with `--config` |
-| `image/Containerfile` | Task image `localhost/factory-agent`: gh, Claude Code pinned, Matt Pocock's skills, global rules |
+| `image/Containerfile` | Task image `localhost/factory-agent`: gh, .NET SDK, Claude Code pinned, Matt Pocock's skills, global rules |
 | `image/settings.json` | Claude settings baked into it: herdr state hooks, no attribution, concise style |
 | `image/claude-task` | Starts Claude with the task's credentials, read from a read-only mount |
 | `lifeos/Containerfile` | LifeOS image `localhost/lifeos`: bun, Claude Code, gh, rg, python3 |
@@ -40,7 +40,8 @@ runs shellcheck at build time.
 ## How a task runs
 
 1. The launcher reads the issue with that repository's PAT and refuses it
-   without the `agent-ready` label (`--force` skips the check).
+   without the `agent-ready` or `ready-for-agent` label (`--force` skips the
+   check).
 2. It clones the repository, gives the task its own secrets directory (the
    Claude token and that one repository's PAT, nothing else), and starts the
    dev container.
