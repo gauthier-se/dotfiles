@@ -1,0 +1,19 @@
+#!/bin/sh
+# Main process of the LifeOS container: Pulse in the foreground, so the host's
+# user service supervises it (no systemd in here). Before LifeOS is installed in
+# the volume there is nothing to run yet, and the container just stays up.
+set -eu
+CLAUDE_CODE_OAUTH_TOKEN=$(cat /run/secrets/lifeos/claude-oauth-token)
+export CLAUDE_CODE_OAUTH_TOKEN
+
+# All interfaces inside the container: Podman publishes the port on the VM's
+# loopback only, so it stays reachable through an SSH tunnel and nothing else.
+export LIFEOS_PULSE_BIND_ALL=1
+
+pulse="$HOME/.claude/LIFEOS/PULSE"
+if [ -f "$pulse/pulse.ts" ]; then
+  cd "$pulse"
+  exec bun run pulse.ts
+fi
+echo "LifeOS is not installed in the volume yet: no Pulse to run" >&2
+exec sleep infinity

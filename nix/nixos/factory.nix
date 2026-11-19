@@ -130,6 +130,8 @@ in
     mkdir -p $out
     cp ${../../factory/lifeos/Containerfile} $out/Containerfile
     cp ${../../factory/lifeos/lifeos-claude} $out/lifeos-claude
+    cp ${../../factory/lifeos/lifeos-launch} $out/lifeos-launch
+    cp ${../../factory/lifeos/lifeos-pulse} $out/lifeos-pulse
     cp ${../../configs/claude/CLAUDE.md} $out/CLAUDE.md
   '';
 

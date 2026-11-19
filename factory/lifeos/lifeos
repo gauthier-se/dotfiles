@@ -1,8 +1,10 @@
 # lifeos: open LifeOS, which runs in its own container for the `lifeos` user.
 #
-#   lifeos            Claude in the container, where LifeOS lives
+#   lifeos            LifeOS, with its system prompt
+#   lifeos claude     plain Claude in the same container
 #   lifeos shell      a shell in the container (bun, the LifeOS tools)
 #   lifeos status     the user service and the container
+#   lifeos logs       the last lines Pulse wrote
 #
 # Packaged by nix/nixos/factory.nix with writeShellApplication. The container
 # itself is kept up by the `lifeos` user service, not by this command.
@@ -13,6 +15,7 @@ case "${1:-}" in
     systemctl --user --no-pager status lifeos.service | head -5 || true
     podman ps --filter name=lifeos --format '{{.Names}} {{.Status}}'
     ;;
-  "") exec podman exec -it -w /home/vscode lifeos lifeos-claude ;;
-  *) exec podman exec -it -w /home/vscode lifeos lifeos-claude "$@" ;;
+  logs) exec journalctl --user -u lifeos.service -n 50 --no-pager ;;
+  claude) shift; exec podman exec -it -w /home/vscode lifeos lifeos-claude "$@" ;;
+  *) exec podman exec -it -w /home/vscode lifeos lifeos-launch "$@" ;;
 esac

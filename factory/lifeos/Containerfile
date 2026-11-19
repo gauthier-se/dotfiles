@@ -7,8 +7,19 @@
 # service builds it on first start if it is missing.
 FROM mcr.microsoft.com/devcontainers/base:ubuntu-24.04
 
-COPY lifeos-claude /usr/local/bin/lifeos-claude
-RUN chmod 0755 /usr/local/bin/lifeos-claude
+COPY lifeos-claude lifeos-launch lifeos-pulse /usr/local/bin/
+RUN chmod 0755 /usr/local/bin/lifeos-claude /usr/local/bin/lifeos-launch /usr/local/bin/lifeos-pulse
+
+# gh is the system of record of LifeOS's Work System, with no fallback; rg is
+# what its tools spawn; python3 is what node-gyp needs to build node-pty during
+# installs and updates (make and g++ come with the base image).
+RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+      -o /usr/share/keyrings/githubcli-archive-keyring.gpg \
+ && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
+      > /etc/apt/sources.list.d/github-cli.list \
+ && apt-get update \
+ && apt-get install -y --no-install-recommends gh ripgrep python3 \
+ && rm -rf /var/lib/apt/lists/*
 
 USER vscode
 WORKDIR /home/vscode
@@ -25,7 +36,9 @@ RUN curl -fsSL https://claude.ai/install.sh | bash -s "$CLAUDE_CODE_VERSION" \
  && claude --version
 
 # Global rules, the same as everywhere else.
-COPY --chown=vscode:vscode CLAUDE.md /home/vscode/.claude/CLAUDE.md
+# Writable: LifeOS appends its identity imports below these rules. The Nix
+# store copy is 0444, which COPY would otherwise keep.
+COPY --chown=vscode:vscode --chmod=0644 CLAUDE.md /home/vscode/.claude/CLAUDE.md
 RUN printf '%s\n' '{"hasCompletedOnboarding": true}' > /home/vscode/.claude.json
 
-CMD ["sleep", "infinity"]
+CMD ["lifeos-pulse"]

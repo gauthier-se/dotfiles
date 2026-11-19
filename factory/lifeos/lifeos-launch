@@ -1,0 +1,13 @@
+#!/bin/sh
+# Open LifeOS with its system prompt: what the installer's `lifeos` alias does,
+# without a shell rc file to depend on. Falls back to plain Claude before
+# LifeOS is installed.
+set -eu
+CLAUDE_CODE_OAUTH_TOKEN=$(cat /run/secrets/lifeos/claude-oauth-token)
+export CLAUDE_CODE_OAUTH_TOKEN
+
+lifeos="$HOME/.claude/LIFEOS"
+if [ -f "$lifeos/TOOLS/lifeos.ts" ]; then
+  exec bun "$lifeos/TOOLS/lifeos.ts" -s "$lifeos/LIFEOS_SYSTEM_PROMPT.md" "$@"
+fi
+exec claude "$@"
