@@ -30,6 +30,7 @@ everywhere.
 | `git`       | Git configuration (delta, Moonfly theme)     |
 | `lazygit`   | Git TUI                                      |
 | `lazydocker`| Docker TUI                                   |
+| `claude`    | Global Claude Code rules (`CLAUDE.md`), shared with the factory's images |
 
 ### macOS only
 
@@ -69,4 +70,5 @@ See [`nix/README.md`](nix/README.md) for day-to-day usage and per-project devshe
 nix/        flake.nix, darwin/ (macOS system), nixos/ (laptop system),
             home/ (user: common + per-OS), templates/ (devshells)
 configs/    dotfiles, symlinked into $HOME by home-manager (editable without rebuild)
+factory/    the agent factory: task image, LifeOS image, launcher, dev container template
 ```
